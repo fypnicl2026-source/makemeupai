@@ -4,6 +4,7 @@ Disallow: /dashboard
 Disallow: /wardrobe
 Disallow: /recommendations
 Disallow: /bookings
+Disallow: /face-insights
 Disallow: /signin
 
-Sitemap: https://makemeupai.vercel.app/sitemap.xml
+Sitemap: https://makemeupai-main.vercel.app/sitemap.xml

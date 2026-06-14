@@ -3,6 +3,7 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
+# Mount a Railway volume at /app/storage/app/public for persistent wardrobe/selfie uploads.
 healthcheckPath = "/up"
 healthcheckTimeout = 180
 restartPolicyType = "ON_FAILURE"

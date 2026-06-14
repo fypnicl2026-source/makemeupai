@@ -1,6 +1,24 @@
 # Changelog
 
-All notable frontend changes for MakemeupAI are documented here.
+All notable frontend and backend changes for MakemeupAI are documented here.
+
+## [0.6.0] - 2026-06-11
+
+### Fixed (testing & wiring audit)
+
+- Absolute public storage URLs via `PublicStorageUrl` helper (wardrobe, selfies, beautician photos)
+- CORS reads `FRONTEND_URL` env; `trustProxies` enabled for Railway HTTPS
+- Recommendations page shows API error messages instead of a generic failure flag
+- Production SEO: `public/sitemap.xml` and `public/robots.txt` use Vercel URLs
+
+### Added
+
+- `TESTING_CHECKLIST.md` FLOW 9 — production sign-up + CORS smoke
+- Production URL reference and Railway upload persistence caveat in testing docs
+
+### Known limitations
+
+- Railway container storage is ephemeral — uploaded images may not survive redeploys without a volume or S3
 
 ## [0.5.0] - 2026-06-03
 

@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Support\PublicStorageUrl;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class ClothingItemResource extends JsonResource
 {
@@ -18,9 +18,7 @@ class ClothingItemResource extends JsonResource
             'season' => $this->season,
             'occasion' => $this->occasion,
             'notes' => $this->notes,
-            'image_url' => $this->image_path
-                ? Storage::disk('public')->url($this->image_path)
-                : null,
+            'image_url' => PublicStorageUrl::fromPath($this->image_path),
             'created_at' => $this->created_at,
         ];
     }

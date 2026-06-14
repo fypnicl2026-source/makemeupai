@@ -7,11 +7,14 @@ It is a draft meant to guide implementation and can be versioned as backend evol
 
 ## 2. Conventions
 
-- Base URL (dev): `/api/v1`
-- Auth: `Bearer <token>` (JWT or Sanctum token)
-- Content-Type: `application/json`
+- Base URL (dev): `http://localhost:8000/api` (frontend uses `VITE_API_URL` or defaults to localhost)
+- Base URL (prod): `https://makemeupai-production.up.railway.app/api`
+- Auth: **Laravel Sanctum SPA** — session cookies + CSRF (`GET /sanctum/csrf-cookie` before mutating requests); Axios uses `withCredentials: true`
+- Content-Type: `application/json` (multipart for wardrobe/selfie uploads)
 - Time format: ISO 8601 (UTC)
-- IDs: UUID or numeric IDs (backend decision; keep consistent)
+- IDs: numeric auto-increment IDs
+
+> **Note:** This draft previously described Bearer tokens and `/api/v1` paths. The implemented API uses cookie auth at `/api/*` without a version prefix.
 
 ## 3. Standard Response Shapes
 

@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Support\PublicStorageUrl;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class BeauticianResource extends JsonResource
 {
@@ -18,9 +18,7 @@ class BeauticianResource extends JsonResource
             'specializations' => $this->specializations,
             'hourly_rate' => $this->hourly_rate,
             'skill_badge' => $this->skill_badge,
-            'profile_photo_url' => $this->profile_photo
-                ? Storage::disk('public')->url($this->profile_photo)
-                : null,
+            'profile_photo_url' => PublicStorageUrl::fromPath($this->profile_photo),
             'is_available' => $this->is_available,
             'avg_rating' => $this->avg_rating,
             'created_at' => $this->created_at,
