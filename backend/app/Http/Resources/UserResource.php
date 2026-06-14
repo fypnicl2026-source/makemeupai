@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Support\PublicStorageUrl;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 class UserResource extends JsonResource
 {
@@ -17,9 +17,7 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'city' => $this->city,
             'profile_photo' => $this->profile_photo,
-            'profile_photo_url' => $this->profile_photo
-                ? Storage::disk('public')->url($this->profile_photo)
-                : null,
+            'profile_photo_url' => PublicStorageUrl::fromPath($this->profile_photo),
             'face_traits' => $this->face_traits,
             'email_verified_at' => $this->email_verified_at,
             'created_at' => $this->created_at,

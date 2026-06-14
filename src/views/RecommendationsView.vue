@@ -50,7 +50,7 @@ const selectedOccasion = ref("casual");
 const combinations = ref([]);
 const loading = ref(false);
 const hasFetched = ref(false);
-const error = ref(false);
+const error = ref("");
 
 const weatherBadge = computed(() => {
   if (combinations.value.length === 0) return null;
@@ -75,13 +75,14 @@ function normalizeItems(items) {
 async function fetchRecommendations() {
   hasFetched.value = true;
   loading.value = true;
-  error.value = false;
+  error.value = "";
   combinations.value = [];
 
   try {
     combinations.value = await getRecommendations(selectedOccasion.value);
-  } catch {
-    error.value = true;
+  } catch (err) {
+    error.value =
+      err.response?.data?.message || "Could not load recommendations. Please try again.";
   } finally {
     loading.value = false;
   }
@@ -160,7 +161,7 @@ onMounted(() => {
       </div>
 
       <div v-else-if="error" class="glass-card px-6 py-12 text-center">
-        <p class="font-semibold text-brand-plum">Could not load recommendations. Try again.</p>
+        <p class="font-semibold text-brand-plum">{{ error }}</p>
         <button type="button" class="btn-primary mt-4" @click="fetchRecommendations">Try Again</button>
       </div>
 

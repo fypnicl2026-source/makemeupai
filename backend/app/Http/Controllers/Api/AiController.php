@@ -6,6 +6,7 @@ use App\Http\Controllers\Concerns\RespondsWithJson;
 use App\Http\Controllers\Controller;
 use App\Services\FaceAnalysisService;
 use App\Services\LookRecommendationService;
+use App\Support\PublicStorageUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -94,6 +95,6 @@ class AiController extends Controller
 
     private function profilePhotoUrl(?string $path): ?string
     {
-        return $path ? Storage::disk('public')->url($path) : null;
+        return PublicStorageUrl::fromPath($path);
     }
 }

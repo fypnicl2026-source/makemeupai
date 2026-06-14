@@ -171,9 +171,52 @@ Expect HTTP **200**.
 
 | Metric | Value |
 |--------|-------|
-| **Flows passed** | ___ / 8 |
+| **Flows passed** | ___ / 9 |
 | **Blockers** | |
 | **Environment notes** | (browser version, PHP version, Node version, anything unusual) |
+
+---
+
+## Production URLs (Vercel + Railway)
+
+| Layer | URL |
+|-------|-----|
+| Frontend (Vercel) | https://makemeupai-main.vercel.app |
+| API (Railway) | https://makemeupai-production.up.railway.app |
+
+**Production smoke (PowerShell):**
+
+```powershell
+Invoke-WebRequest -Uri "https://makemeupai-production.up.railway.app/up" -UseBasicParsing
+Invoke-WebRequest -Uri "https://makemeupai-main.vercel.app" -UseBasicParsing
+Invoke-WebRequest -Uri "https://makemeupai-production.up.railway.app/api/beauticians" -UseBasicParsing
+```
+
+Expect HTTP **200** on all three. The Vercel bundle must call Railway (not `localhost:8000`) — check DevTools → Network or bundled JS for `makemeupai-production.up.railway.app`.
+
+**Production uploads:** Image URLs are served from the API host (`APP_URL/storage/...`), not the Vercel domain. A Railway volume should be mounted at `/app/storage/app/public` so wardrobe/selfie files survive redeploys.
+
+**Volume persistence check (production):**
+
+| Step | Action | Expected |
+|------|--------|----------|
+| 1 | Sign in, upload a wardrobe item with an image | Thumbnail URL starts with `https://makemeupai-production.up.railway.app/storage/` |
+| 2 | Note the `image_url`, then trigger a Railway redeploy | After deploy completes, open the same URL | HTTP **200**, image still visible |
+
+---
+
+## FLOW 9 — Production sign-up and CORS smoke
+
+**Goal:** Cross-origin Sanctum auth works between Vercel and Railway.
+
+| Step | Action | Expected result | PASS | FAIL | NOTES |
+|------|--------|-----------------|------|------|-------|
+| 1 | - [ ] Open https://makemeupai-main.vercel.app in an incognito window | Home loads; no CORS errors in DevTools console | | | |
+| 2 | - [ ] Sign up with a fresh email | Redirect to `/dashboard`; no 419 CSRF error | | | |
+| 3 | - [ ] DevTools → Network: first API call to Railway | Requests go to `makemeupai-production.up.railway.app`, not `localhost:8000` | | | |
+| 4 | - [ ] DevTools → Network: `GET /sanctum/csrf-cookie` | Status **204**; `Access-Control-Allow-Origin: https://makemeupai-main.vercel.app` | | | |
+| 5 | - [ ] Hard refresh on `/dashboard` | Still logged in | | | |
+| 6 | - [ ] Visit https://makemeupai-main.vercel.app/beauticians | 5 beauticians load from API | | | |
 
 ---
 
@@ -192,6 +235,16 @@ Expect HTTP **200**.
 | Wardrobe | http://localhost:5173/wardrobe |
 | Recommendations | http://localhost:5173/recommendations |
 | Bookings | http://localhost:5173/bookings |
+| Face Insights | http://localhost:5173/face-insights |
+
+### Production (Vercel)
+
+| Page | URL |
+|------|-----|
+| Home | https://makemeupai-main.vercel.app/ |
+| Sign Up | https://makemeupai-main.vercel.app/signup |
+| Beauticians | https://makemeupai-main.vercel.app/beauticians |
+| API health | https://makemeupai-production.up.railway.app/up |
 
 ---
 
@@ -212,6 +265,7 @@ flowchart LR
     F6[Dashboard]
     F7[Guards]
     F8[Offline]
+    F9[Production CORS]
   end
   Laravel --> flows
   Vue --> flows
