@@ -2,6 +2,8 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
+let csrfToken = null;
+
 const api = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
@@ -13,7 +15,16 @@ const api = axios.create({
 
 export async function getCsrf() {
   await api.get("/sanctum/csrf-cookie");
+  const { data } = await api.get("/sanctum/csrf-token");
+  csrfToken = data.csrf_token;
 }
+
+api.interceptors.request.use((config) => {
+  if (csrfToken && ["post", "put", "patch", "delete"].includes(config.method)) {
+    config.headers["X-XSRF-TOKEN"] = csrfToken;
+  }
+  return config;
+});
 
 api.interceptors.response.use(
   (response) => response,
