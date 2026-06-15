@@ -36,8 +36,10 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
+        $token = $user->createToken('spa')->plainTextToken;
+
         return $this->success(
-            ['user' => new UserResource($user)],
+            ['user' => new UserResource($user), 'token' => $token],
             'Registration successful.',
             201
         );
@@ -58,14 +60,19 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        $user = $request->user();
+        $token = $user->createToken('spa')->plainTextToken;
+
         return $this->success(
-            ['user' => new UserResource($request->user())],
+            ['user' => new UserResource($user), 'token' => $token],
             'Login successful.'
         );
     }
 
     public function logout(Request $request)
     {
+        $request->user()?->currentAccessToken()?->delete();
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

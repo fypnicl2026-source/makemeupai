@@ -108,7 +108,8 @@ class ApiSmokeTest extends TestCase
         $response->assertCreated()
             ->assertJson(['success' => true])
             ->assertJsonPath('data.user.email', 'newuser@example.com')
-            ->assertJsonPath('data.user.name', 'Test User');
+            ->assertJsonPath('data.user.name', 'Test User')
+            ->assertJsonStructure(['data' => ['user', 'token']]);
     }
 
     public function test_register_with_duplicate_email_returns_422(): void
@@ -146,7 +147,8 @@ class ApiSmokeTest extends TestCase
         $response->assertOk()
             ->assertJson(['success' => true])
             ->assertJsonPath('data.user.id', $user->id)
-            ->assertJsonPath('data.user.email', 'login@example.com');
+            ->assertJsonPath('data.user.email', 'login@example.com')
+            ->assertJsonStructure(['data' => ['user', 'token']]);
     }
 
     public function test_login_with_wrong_password_returns_422(): void
@@ -190,6 +192,20 @@ class ApiSmokeTest extends TestCase
         $response = $this->getJson('/api/wardrobe');
 
         $response->assertUnauthorized();
+    }
+
+    public function test_get_wardrobe_with_bearer_token_returns_200(): void
+    {
+        $user = $this->makeUser();
+        $this->seedWardrobeItem($user);
+        $token = $user->createToken('spa')->plainTextToken;
+
+        $response = $this->getJson('/api/wardrobe', [
+            'Authorization' => 'Bearer '.$token,
+        ]);
+
+        $response->assertOk()
+            ->assertJson(['success' => true]);
     }
 
     public function test_get_wardrobe_with_auth_returns_200(): void

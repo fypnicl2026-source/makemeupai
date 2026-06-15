@@ -9,12 +9,12 @@ It is a draft meant to guide implementation and can be versioned as backend evol
 
 - Base URL (dev): `http://localhost:8000/api` (frontend uses `VITE_API_URL` or defaults to localhost)
 - Base URL (prod): `https://makemeupai-production.up.railway.app/api`
-- Auth: **Laravel Sanctum SPA** — session cookies + CSRF (`GET /sanctum/csrf-cookie` before mutating requests); Axios uses `withCredentials: true`
+- Auth: **Laravel Sanctum** — CSRF (`GET /sanctum/csrf-cookie` + `GET /sanctum/csrf-token`) before mutating requests; login/register return `data.token`; frontend sends `Authorization: Bearer {token}` on all API requests (sessionStorage). Axios uses `withCredentials: true` for CSRF cookies.
 - Content-Type: `application/json` (multipart for wardrobe/selfie uploads)
 - Time format: ISO 8601 (UTC)
 - IDs: numeric auto-increment IDs
 
-> **Note:** This draft previously described Bearer tokens and `/api/v1` paths. The implemented API uses cookie auth at `/api/*` without a version prefix.
+> **Note:** Cross-origin production (Vercel SPA + Railway API) uses Bearer tokens from login/register because browser session cookies may not persist across sites. Local dev may still use cookies when same-origin.
 
 ## 3. Standard Response Shapes
 
