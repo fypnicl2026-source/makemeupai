@@ -21,7 +21,7 @@ export async function getCsrf() {
 
 api.interceptors.request.use((config) => {
   if (csrfToken && ["post", "put", "patch", "delete"].includes(config.method)) {
-    config.headers["X-XSRF-TOKEN"] = csrfToken;
+    config.headers["X-CSRF-TOKEN"] = csrfToken;
   }
   return config;
 });
