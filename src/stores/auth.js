@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import api, { getCsrf } from "../services/api";
+import api, { getAuthToken, getCsrf, setAuthToken } from "../services/api";
 
 function setAuthenticatedUser(store, user) {
   store.user = user;
@@ -9,6 +9,7 @@ function setAuthenticatedUser(store, user) {
 function clearUser(store) {
   store.user = null;
   store.isLoggedIn = false;
+  setAuthToken(null);
 }
 
 export const authStore = reactive({
@@ -21,7 +22,8 @@ export const authStore = reactive({
     try {
       await getCsrf();
       const { data } = await api.post("/api/auth/login", { email, password });
-      setAuthenticatedUser(this, data.data.user);
+      setAuthToken(data.data.token);
+      await this.fetchUser();
       return data;
     } finally {
       this.loading = false;
@@ -39,7 +41,8 @@ export const authStore = reactive({
         password_confirmation: passwordConfirmation,
         city,
       });
-      setAuthenticatedUser(this, data.data.user);
+      setAuthToken(data.data.token);
+      await this.fetchUser();
       return data;
     } finally {
       this.loading = false;
@@ -60,6 +63,11 @@ export const authStore = reactive({
   async fetchUser() {
     this.loading = true;
     try {
+      if (!getAuthToken()) {
+        clearUser(this);
+        return null;
+      }
+
       const { data } = await api.get("/api/auth/me");
       setAuthenticatedUser(this, data.data.user);
       return data;

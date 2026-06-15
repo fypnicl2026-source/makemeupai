@@ -17,7 +17,9 @@ async function handleSubmit() {
 
   try {
     await authStore.login(email.value, password.value);
-    router.push("/dashboard");
+    if (authStore.isLoggedIn) {
+      router.push("/dashboard");
+    }
   } catch (error) {
     errorMessage.value = error.response?.data?.message || "Unable to sign in. Please try again.";
     fieldErrors.value = error.response?.data?.errors || {};

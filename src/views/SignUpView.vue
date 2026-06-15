@@ -30,7 +30,9 @@ async function handleSubmit() {
 
   try {
     await authStore.register(name.value, email.value, password.value, confirmPassword.value, city.value);
-    router.push("/dashboard");
+    if (authStore.isLoggedIn) {
+      router.push("/dashboard");
+    }
   } catch (error) {
     errorMessage.value = error.response?.data?.message || "Unable to create account. Please try again.";
     fieldErrors.value = error.response?.data?.errors || {};
