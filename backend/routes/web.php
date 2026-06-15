@@ -12,3 +12,7 @@ Route::get('/', function () {
         ],
     ]);
 });
+
+Route::get('/sanctum/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+})->middleware('web');
