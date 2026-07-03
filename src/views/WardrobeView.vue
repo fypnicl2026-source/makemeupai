@@ -195,10 +195,10 @@ onMounted(() => {
     <section class="container-shell py-10 pb-24">
       <div class="mb-6">
         <h1 class="text-3xl font-bold text-brand-plum">My Wardrobe</h1>
-        <p class="mt-1 text-sm text-[#6f6176]">Manage your clothing items and get better outfit suggestions.</p>
+        <p class="mt-1 text-sm text-brand-muted">Manage your clothing items and get better outfit suggestions.</p>
       </div>
 
-      <div class="mb-8 flex gap-1 overflow-x-auto border-b border-[#f0dce8] pb-1">
+      <div class="mb-8 flex gap-1 overflow-x-auto border-b border-brand-border pb-1">
         <button
           v-for="cat in CATEGORIES"
           :key="cat.label"
@@ -207,7 +207,7 @@ onMounted(() => {
           :class="
             activeCategory === cat.value
               ? 'border-b-2 border-brand-rose font-semibold text-brand-plum'
-              : 'text-[#6f6176] hover:text-brand-plum'
+              : 'text-brand-muted hover:text-brand-plum'
           "
           @click="activeCategory = cat.value"
         >
@@ -217,7 +217,7 @@ onMounted(() => {
 
       <div v-if="loading" class="flex justify-center py-20">
         <div
-          class="h-10 w-10 animate-spin rounded-full border-4 border-[#f0dce8] border-t-brand-rose"
+          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose"
         ></div>
       </div>
 
@@ -231,7 +231,7 @@ onMounted(() => {
         class="glass-card flex flex-col items-center justify-center px-6 py-16 text-center"
       >
         <p class="text-lg font-semibold text-brand-plum">Your wardrobe is empty</p>
-        <p class="mt-2 text-sm text-[#6f6176]">
+        <p class="mt-2 text-sm text-brand-muted">
           Add your first item to start building your digital wardrobe.
         </p>
         <button type="button" class="btn-primary mt-6" @click="openModal">Add Item</button>
@@ -257,7 +257,7 @@ onMounted(() => {
             </div>
             <button
               type="button"
-              class="absolute right-2 top-2 rounded-lg bg-white/90 p-2 text-[#6f6176] shadow hover:bg-white hover:text-red-500"
+              class="absolute right-2 top-2 rounded-lg bg-white/90 p-2 text-brand-muted shadow hover:bg-white hover:text-red-500"
               aria-label="Delete item"
               @click="handleDelete(item.id)"
             >
@@ -268,7 +268,7 @@ onMounted(() => {
             </button>
           </div>
           <div class="p-4">
-            <h3 class="font-semibold text-[#1f1124]">{{ item.name }}</h3>
+            <h3 class="font-semibold text-brand-ink">{{ item.name }}</h3>
             <span
               class="mt-2 inline-block rounded-full bg-[#fff0f5] px-2.5 py-0.5 text-xs font-medium capitalize text-brand-plum"
             >
@@ -278,7 +278,7 @@ onMounted(() => {
               <span
                 v-for="tag in item.occasion"
                 :key="tag"
-                class="rounded-md bg-[#f0dce8]/60 px-2 py-0.5 text-xs capitalize text-[#6f6176]"
+                class="rounded-md bg-[#f0dce8]/60 px-2 py-0.5 text-xs capitalize text-brand-muted"
               >
                 {{ tag }}
               </span>
@@ -314,23 +314,23 @@ onMounted(() => {
 
         <form class="mt-4 space-y-4" @submit.prevent="handleAddSubmit">
           <div>
-            <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="item-name">Name</label>
+            <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="item-name">Name</label>
             <input
               id="item-name"
               v-model="name"
               type="text"
               required
-              class="w-full rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+              class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
             />
           </div>
 
           <div>
-            <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="item-category">Category</label>
+            <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="item-category">Category</label>
             <select
               id="item-category"
               v-model="category"
               required
-              class="w-full rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+              class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
             >
               <option value="" disabled>Select category</option>
               <option v-for="cat in CATEGORIES.filter((c) => c.value)" :key="cat.value" :value="cat.value">
@@ -340,25 +340,25 @@ onMounted(() => {
           </div>
 
           <div>
-            <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="item-colors">Colors</label>
+            <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="item-colors">Colors</label>
             <input
               id="item-colors"
               v-model="colorsInput"
               type="text"
               placeholder="e.g. red, black"
               required
-              class="w-full rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+              class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
             />
           </div>
 
           <div>
-            <p class="mb-2 text-sm font-medium text-[#6f6176]">Season</p>
+            <p class="mb-2 text-sm font-medium text-brand-muted">Season</p>
             <div class="flex flex-wrap gap-3">
               <label v-for="season in SEASONS" :key="season" class="flex cursor-pointer items-center gap-2 text-sm capitalize">
                 <input
                   type="checkbox"
                   :checked="selectedSeasons.includes(season)"
-                  class="rounded border-[#f0dce8] text-brand-rose focus:ring-brand-rose"
+                  class="rounded border-brand-border text-brand-rose focus:ring-brand-rose"
                   @change="toggleSeason(season)"
                 />
                 {{ season }}
@@ -367,13 +367,13 @@ onMounted(() => {
           </div>
 
           <div>
-            <p class="mb-2 text-sm font-medium text-[#6f6176]">Occasion</p>
+            <p class="mb-2 text-sm font-medium text-brand-muted">Occasion</p>
             <div class="flex flex-wrap gap-3">
               <label v-for="occasion in OCCASIONS" :key="occasion" class="flex cursor-pointer items-center gap-2 text-sm capitalize">
                 <input
                   type="checkbox"
                   :checked="selectedOccasions.includes(occasion)"
-                  class="rounded border-[#f0dce8] text-brand-rose focus:ring-brand-rose"
+                  class="rounded border-brand-border text-brand-rose focus:ring-brand-rose"
                   @change="toggleOccasion(occasion)"
                 />
                 {{ occasion }}
@@ -382,23 +382,23 @@ onMounted(() => {
           </div>
 
           <div>
-            <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="item-image">Image</label>
+            <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="item-image">Image</label>
             <input
               id="item-image"
               type="file"
               accept="image/*"
-              class="w-full text-sm text-[#6f6176] file:mr-3 file:rounded-lg file:border-0 file:bg-[#fff0f5] file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-brand-plum"
+              class="w-full text-sm text-brand-muted file:mr-3 file:rounded-lg file:border-0 file:bg-[#fff0f5] file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-brand-plum"
               @change="onImageChange"
             />
           </div>
 
           <div>
-            <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="item-notes">Notes</label>
+            <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="item-notes">Notes</label>
             <textarea
               id="item-notes"
               v-model="notes"
               rows="3"
-              class="w-full rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+              class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
             ></textarea>
           </div>
 

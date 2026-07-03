@@ -20,6 +20,7 @@ class UserResource extends JsonResource
             'profile_photo_url' => PublicStorageUrl::fromPath($this->profile_photo),
             'face_traits' => $this->face_traits,
             'email_verified_at' => $this->email_verified_at,
+            'email_verified' => $this->hasVerifiedEmail(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

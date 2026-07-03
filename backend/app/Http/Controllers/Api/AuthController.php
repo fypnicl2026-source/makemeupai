@@ -6,8 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Concerns\RespondsWithJson;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -33,6 +38,8 @@ class AuthController extends Controller
             'profile_photo' => $validated['profile_photo'] ?? null,
         ]);
 
+        event(new Registered($user));
+
         Auth::login($user);
         $request->session()->regenerate();
 
@@ -52,11 +59,25 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
-            return $this->error('Invalid credentials.', [
-                'email' => ['The provided credentials are incorrect.'],
-            ], 422);
+        $key = Str::transliterate(Str::lower($credentials['email']).'|'.$request->ip());
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+
+            return $this->error(
+                "Too many login attempts. Please try again in {$seconds} seconds.",
+                null,
+                429
+            );
         }
+
+        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            RateLimiter::hit($key, 60);
+
+            return $this->error('Invalid credentials.', null, 401);
+        }
+
+        RateLimiter::clear($key);
 
         $request->session()->regenerate();
 
@@ -71,12 +92,17 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()?->currentAccessToken()?->delete();
+        $token = $request->user()?->currentAccessToken();
 
-        Auth::guard('web')->logout();
+        if ($token instanceof \Laravel\Sanctum\PersonalAccessToken) {
+            $token->delete();
+        }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($request->hasSession()) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return $this->success(null, 'Logged out successfully.');
     }
@@ -87,5 +113,44 @@ class AuthController extends Controller
             ['user' => new UserResource($request->user())],
             'Authenticated user retrieved.'
         );
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        Password::sendResetLink($request->only('email'));
+
+        return $this->success(null, 'If that email exists, a reset link was sent.');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => ['required', 'string'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                $user->tokens()->delete();
+            }
+        );
+
+        if ($status !== Password::PASSWORD_RESET) {
+            return $this->error(__($status), null, 422);
+        }
+
+        return $this->success(null, 'Password has been reset.');
     }
 }

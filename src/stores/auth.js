@@ -17,11 +17,15 @@ export const authStore = reactive({
   isLoggedIn: false,
   loading: false,
 
-  async login(email, password) {
+  get emailVerified() {
+    return Boolean(this.user?.email_verified);
+  },
+
+  async login(email, password, remember = false) {
     this.loading = true;
     try {
       await getCsrf();
-      const { data } = await api.post("/api/auth/login", { email, password });
+      const { data } = await api.post("/api/auth/login", { email, password, remember });
       setAuthToken(data.data.token);
       await this.fetchUser();
       return data;
@@ -80,5 +84,28 @@ export const authStore = reactive({
     } finally {
       this.loading = false;
     }
+  },
+
+  async forgotPassword(email) {
+    await getCsrf();
+    const { data } = await api.post("/api/auth/forgot-password", { email });
+    return data;
+  },
+
+  async resetPassword(token, email, password, passwordConfirmation) {
+    await getCsrf();
+    const { data } = await api.post("/api/auth/reset-password", {
+      token,
+      email,
+      password,
+      password_confirmation: passwordConfirmation,
+    });
+    return data;
+  },
+
+  async resendVerification() {
+    await getCsrf();
+    const { data } = await api.post("/api/auth/email/resend");
+    return data;
   },
 });

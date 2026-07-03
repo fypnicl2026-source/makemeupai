@@ -62,7 +62,7 @@ onMounted(() => {
     <section class="container-shell py-10">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-brand-plum">My Bookings</h1>
-        <p class="mt-1 text-sm text-[#6f6176]">View and manage your beautician appointments.</p>
+        <p class="mt-1 text-sm text-brand-muted">View and manage your beautician appointments.</p>
       </div>
 
       <div
@@ -73,12 +73,12 @@ onMounted(() => {
       </div>
 
       <div v-if="loading" class="flex justify-center py-20">
-        <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#f0dce8] border-t-brand-rose"></div>
+        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose"></div>
       </div>
 
       <div v-else-if="bookings.length === 0" class="glass-card px-6 py-12 text-center">
         <p class="font-semibold text-brand-plum">No bookings yet</p>
-        <p class="mt-2 text-sm text-[#6f6176]">Book a beautician to see your appointments here.</p>
+        <p class="mt-2 text-sm text-brand-muted">Book a beautician to see your appointments here.</p>
         <RouterLink to="/beauticians" class="btn-primary mt-6 inline-block">Browse Beauticians</RouterLink>
       </div>
 
@@ -99,9 +99,9 @@ onMounted(() => {
                 {{ initials(booking.beautician.name) }}
               </div>
               <div>
-                <h3 class="font-semibold text-[#1f1124]">{{ booking.beautician.name }}</h3>
-                <p class="text-sm text-[#6f6176]">{{ booking.service_type }}</p>
-                <p class="mt-1 text-sm text-[#6f6176]">
+                <h3 class="font-semibold text-brand-ink">{{ booking.beautician.name }}</h3>
+                <p class="text-sm text-brand-muted">{{ booking.service_type }}</p>
+                <p class="mt-1 text-sm text-brand-muted">
                   {{ booking.booking_date }} at {{ booking.booking_time }}
                 </p>
               </div>

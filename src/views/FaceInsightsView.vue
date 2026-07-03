@@ -134,7 +134,7 @@ onMounted(() => {
     <section class="container-shell max-w-4xl py-10">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-brand-plum">Face Insights</h1>
-        <p class="mt-1 text-sm text-[#6f6176]">
+        <p class="mt-1 text-sm text-brand-muted">
           Upload a selfie for personalized style analysis. We store your photo on your profile so
           you can refresh recommendations anytime.
         </p>
@@ -142,20 +142,20 @@ onMounted(() => {
 
       <div v-if="loadingProfile" class="flex justify-center py-16">
         <div
-          class="h-10 w-10 animate-spin rounded-full border-4 border-[#f0dce8] border-t-brand-rose"
+          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose"
         ></div>
       </div>
 
       <template v-else>
         <section class="glass-card mb-6 p-5">
           <h2 class="text-lg font-semibold text-brand-plum">Your selfie</h2>
-          <p class="mt-1 text-sm text-[#6f6176]">
+          <p class="mt-1 text-sm text-brand-muted">
             Clear, front-facing photos work best. Uploading again replaces your saved profile photo.
           </p>
 
           <div class="mt-4 flex flex-wrap items-start gap-6">
             <div
-              class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border border-[#f0dce8] bg-[#fff0f5] text-sm text-[#6f6176]"
+              class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border border-brand-border bg-[#fff0f5] text-sm text-brand-muted"
             >
               <img
                 v-if="profilePhotoUrl"
@@ -187,25 +187,25 @@ onMounted(() => {
 
         <section v-if="faceTraits?.faceShape" class="glass-card mb-6 p-5">
           <h2 class="text-lg font-semibold text-brand-plum">Style traits</h2>
-          <p class="mt-1 text-xs text-[#6f6176]">
+          <p class="mt-1 text-xs text-brand-muted">
             Heuristic style analysis (MVP) — suggestions tailored to these traits.
           </p>
           <dl class="mt-4 grid gap-3 sm:grid-cols-3">
-            <div class="rounded-xl border border-[#f0dce8] bg-white/60 px-4 py-3">
-              <dt class="text-xs font-medium text-[#6f6176]">Face shape</dt>
-              <dd class="mt-1 font-semibold capitalize text-[#1f1124]">
+            <div class="rounded-xl border border-brand-border bg-white/60 px-4 py-3">
+              <dt class="text-xs font-medium text-brand-muted">Face shape</dt>
+              <dd class="mt-1 font-semibold capitalize text-brand-ink">
                 {{ formatLabel(faceTraits.faceShape) }}
               </dd>
             </div>
-            <div class="rounded-xl border border-[#f0dce8] bg-white/60 px-4 py-3">
-              <dt class="text-xs font-medium text-[#6f6176]">Skin tone</dt>
-              <dd class="mt-1 font-semibold capitalize text-[#1f1124]">
+            <div class="rounded-xl border border-brand-border bg-white/60 px-4 py-3">
+              <dt class="text-xs font-medium text-brand-muted">Skin tone</dt>
+              <dd class="mt-1 font-semibold capitalize text-brand-ink">
                 {{ formatLabel(faceTraits.skinTone) }}
               </dd>
             </div>
-            <div class="rounded-xl border border-[#f0dce8] bg-white/60 px-4 py-3">
-              <dt class="text-xs font-medium text-[#6f6176]">Hair length</dt>
-              <dd class="mt-1 font-semibold capitalize text-[#1f1124]">
+            <div class="rounded-xl border border-brand-border bg-white/60 px-4 py-3">
+              <dt class="text-xs font-medium text-brand-muted">Hair length</dt>
+              <dd class="mt-1 font-semibold capitalize text-brand-ink">
                 {{ formatLabel(faceTraits.hairLength) }}
               </dd>
             </div>
@@ -214,10 +214,10 @@ onMounted(() => {
 
         <section class="glass-card mb-6 p-5">
           <h2 class="text-lg font-semibold text-brand-plum">Generate your complete look</h2>
-          <p class="mt-1 text-sm text-[#6f6176]">Pick an event and mood for makeup, hair, and mehndi ideas.</p>
+          <p class="mt-1 text-sm text-brand-muted">Pick an event and mood for makeup, hair, and mehndi ideas.</p>
 
           <div class="mt-4">
-            <p class="mb-2 text-sm font-medium text-[#6f6176]">Event</p>
+            <p class="mb-2 text-sm font-medium text-brand-muted">Event</p>
             <div class="flex flex-wrap gap-2">
               <button
                 v-for="event in EVENT_TYPES"
@@ -227,7 +227,7 @@ onMounted(() => {
                 :class="
                   selectedEvent === event.value
                     ? 'bg-[#fff0f5] font-semibold text-brand-plum ring-1 ring-brand-rose'
-                    : 'bg-white text-[#6f6176] hover:text-brand-plum'
+                    : 'bg-white text-brand-muted hover:text-brand-plum'
                 "
                 @click="selectedEvent = event.value"
               >
@@ -237,7 +237,7 @@ onMounted(() => {
           </div>
 
           <div class="mt-4">
-            <p class="mb-2 text-sm font-medium text-[#6f6176]">Style mood</p>
+            <p class="mb-2 text-sm font-medium text-brand-muted">Style mood</p>
             <div class="flex flex-wrap gap-2">
               <button
                 v-for="mood in STYLE_MOODS"
@@ -247,7 +247,7 @@ onMounted(() => {
                 :class="
                   selectedMood === mood.value
                     ? 'bg-[#fff0f5] font-semibold text-brand-plum ring-1 ring-brand-rose'
-                    : 'bg-white text-[#6f6176] hover:text-brand-plum'
+                    : 'bg-white text-brand-muted hover:text-brand-plum'
                 "
                 @click="selectedMood = mood.value"
               >
@@ -270,21 +270,21 @@ onMounted(() => {
         <section v-if="lookResults" class="glass-card mb-6 p-5">
           <h2 class="text-lg font-semibold text-brand-plum">Your look suggestions</h2>
           <div class="mt-4 grid gap-4 md:grid-cols-3">
-            <div class="rounded-xl border border-[#f0dce8] bg-white/60 p-4">
+            <div class="rounded-xl border border-brand-border bg-white/60 p-4">
               <h3 class="font-semibold text-brand-plum">Makeup</h3>
-              <ul class="mt-2 space-y-1 text-sm text-[#6f6176]">
+              <ul class="mt-2 space-y-1 text-sm text-brand-muted">
                 <li v-for="item in lookResults.makeup" :key="item">{{ item }}</li>
               </ul>
             </div>
-            <div class="rounded-xl border border-[#f0dce8] bg-white/60 p-4">
+            <div class="rounded-xl border border-brand-border bg-white/60 p-4">
               <h3 class="font-semibold text-brand-plum">Hairstyle</h3>
-              <ul class="mt-2 space-y-1 text-sm text-[#6f6176]">
+              <ul class="mt-2 space-y-1 text-sm text-brand-muted">
                 <li v-for="item in lookResults.hairstyle" :key="item">{{ item }}</li>
               </ul>
             </div>
-            <div class="rounded-xl border border-[#f0dce8] bg-white/60 p-4">
+            <div class="rounded-xl border border-brand-border bg-white/60 p-4">
               <h3 class="font-semibold text-brand-plum">Mehndi</h3>
-              <ul class="mt-2 space-y-1 text-sm text-[#6f6176]">
+              <ul class="mt-2 space-y-1 text-sm text-brand-muted">
                 <li v-for="item in lookResults.mehndi" :key="item">{{ item }}</li>
               </ul>
             </div>

@@ -59,10 +59,18 @@ OPENWEATHER_KEY=
 |--------|-----|------|
 | POST | `/api/auth/register` | No |
 | POST | `/api/auth/login` | No |
+| POST | `/api/auth/forgot-password` | No |
+| POST | `/api/auth/reset-password` | No |
+| GET | `/api/auth/email/verify/{id}/{hash}` | Signed URL |
 | POST | `/api/auth/logout` | Yes (`auth:sanctum`) |
 | GET | `/api/auth/me` | Yes (`auth:sanctum`) |
+| POST | `/api/auth/email/resend` | Yes (`auth:sanctum`) |
 
-CSRF (Sanctum): `GET /sanctum/csrf-cookie`
+Protected app routes (wardrobe, bookings, recommendations, AI) require `auth:sanctum` **and** verified email (`verified` middleware).
+
+Primary auth pattern: **session-based Sanctum SPA** (`statefulApi`, CSRF cookie flow). Bearer tokens are also issued as a fallback for API clients.
+
+CSRF (Sanctum): `GET /sanctum/csrf-cookie` — `SANCTUM_STATEFUL_DOMAINS` must include `localhost:5173`.
 
 ## Response format
 
@@ -105,3 +113,34 @@ curl -c cookies.txt -b cookies.txt http://localhost:8000/api/auth/me -H "Accept:
 ```
 
 Use `localhost` (not `127.0.0.1`) for both frontend and API when testing cookies.
+
+## Local email testing
+
+Email verification and password reset require outbound mail. By default `.env.example` uses `MAIL_MAILER=log`, which writes messages to `storage/logs/laravel.log` (no real inbox).
+
+To test like a real user (click links in an inbox):
+
+1. Create a free [Mailtrap](https://mailtrap.io) account.
+2. Copy sandbox SMTP credentials into your local `backend/.env`:
+   ```env
+   MAIL_MAILER=smtp
+   MAIL_HOST=sandbox.smtp.mailtrap.io
+   MAIL_PORT=2525
+   MAIL_USERNAME=your_mailtrap_username
+   MAIL_PASSWORD=your_mailtrap_password
+   MAIL_ENCRYPTION=tls
+   ```
+3. Run `php artisan config:clear` and trigger registration or forgot-password.
+
+Never commit real Mailtrap credentials; `.env` is gitignored.
+
+## Production HTTPS (TODO)
+
+For production (cross-site SPA + API), enable secure cookies:
+
+```env
+SESSION_SECURE_COOKIE=true
+SESSION_SAME_SITE=none
+```
+
+Use a production mail provider (e.g. Mailgun, Postmark, SES) instead of Mailtrap.

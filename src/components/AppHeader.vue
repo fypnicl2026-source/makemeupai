@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
+import BrandLogo from "./BrandLogo.vue";
 import { authStore } from "../stores/auth";
 
 defineProps({
@@ -10,32 +11,52 @@ defineProps({
 });
 
 const isMobileMenuOpen = ref(false);
+const isScrolled = ref(false);
+
+function onScroll() {
+  isScrolled.value = window.scrollY > 8;
+}
+
+onMounted(() => window.addEventListener("scroll", onScroll, { passive: true }));
+onUnmounted(() => window.removeEventListener("scroll", onScroll));
 </script>
 
 <template>
-  <header class="sticky top-0 z-10 border-b border-[#f0dce8] bg-[#fff7fb]/90 backdrop-blur">
-    <nav class="container-shell flex min-h-[72px] items-center justify-between gap-4">
-      <RouterLink class="font-extrabold tracking-wide text-brand-plum" to="/">MakemeupAI</RouterLink>
+  <header
+    :class="[
+      'sticky top-0 z-50 border-b transition-all duration-300',
+      isScrolled
+        ? 'border-brand-border/80 bg-white/95 shadow-soft backdrop-blur-lg'
+        : 'border-transparent bg-brand-blush/80 backdrop-blur-md',
+    ]"
+  >
+    <nav class="container-shell flex min-h-[76px] items-center justify-between gap-4">
+      <BrandLogo size="md" />
+
       <button
-        class="rounded-lg border border-[#edd9e5] bg-white px-3 py-2 text-brand-plum md:hidden"
+        type="button"
+        class="rounded-xl border border-brand-border bg-white px-3 py-2 text-sm font-semibold text-brand-plum shadow-sm md:hidden"
+        aria-label="Toggle menu"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
       >
-        Menu
+        {{ isMobileMenuOpen ? "Close" : "Menu" }}
       </button>
-      <ul class="hidden items-center gap-4 text-sm text-[#6f6176] md:flex">
+
+      <ul class="hidden items-center gap-1 md:flex">
         <li v-for="link in links" :key="link.to">
           <RouterLink
             :to="link.to"
-            class="hover:text-brand-plum"
-            active-class="text-brand-plum font-semibold"
+            class="nav-link"
+            active-class="nav-link-active"
           >
             {{ link.label }}
           </RouterLink>
         </li>
       </ul>
+
       <div class="hidden items-center gap-2 md:flex">
         <RouterLink v-if="authStore.isLoggedIn" class="btn-primary" to="/dashboard">
-          Dashboard →
+          Dashboard
         </RouterLink>
         <template v-else>
           <RouterLink class="btn-ghost" to="/signin">Sign In</RouterLink>
@@ -43,36 +64,48 @@ const isMobileMenuOpen = ref(false);
         </template>
       </div>
     </nav>
-    <div
-      v-if="isMobileMenuOpen"
-      class="container-shell mb-3 flex flex-col gap-2 rounded-xl border border-[#f0dce8] bg-white p-3 md:hidden"
+
+    <Transition
+      enter-active-class="transition duration-200 ease-out"
+      enter-from-class="opacity-0 -translate-y-2"
+      enter-to-class="opacity-100 translate-y-0"
+      leave-active-class="transition duration-150 ease-in"
+      leave-from-class="opacity-100 translate-y-0"
+      leave-to-class="opacity-0 -translate-y-2"
     >
-      <RouterLink
-        v-for="link in links"
-        :key="`mobile-${link.to}`"
-        :to="link.to"
-        class="hover:text-brand-plum"
-        active-class="text-brand-plum font-semibold"
-        @click="isMobileMenuOpen = false"
+      <div
+        v-if="isMobileMenuOpen"
+        class="container-shell mb-4 flex flex-col gap-1 rounded-2xl border border-brand-border bg-white p-3 shadow-elevated md:hidden"
       >
-        {{ link.label }}
-      </RouterLink>
-      <RouterLink
-        v-if="authStore.isLoggedIn"
-        class="btn-primary text-center"
-        to="/dashboard"
-        @click="isMobileMenuOpen = false"
-      >
-        Dashboard →
-      </RouterLink>
-      <template v-else>
-        <RouterLink class="btn-ghost text-center" to="/signin" @click="isMobileMenuOpen = false">
-          Sign In
+        <RouterLink
+          v-for="link in links"
+          :key="`mobile-${link.to}`"
+          :to="link.to"
+          class="nav-link"
+          active-class="nav-link-active"
+          @click="isMobileMenuOpen = false"
+        >
+          {{ link.label }}
         </RouterLink>
-        <RouterLink class="btn-primary text-center" to="/signup" @click="isMobileMenuOpen = false">
-          Get Started
-        </RouterLink>
-      </template>
-    </div>
+        <div class="mt-2 flex flex-col gap-2 border-t border-brand-border pt-3">
+          <RouterLink
+            v-if="authStore.isLoggedIn"
+            class="btn-primary text-center"
+            to="/dashboard"
+            @click="isMobileMenuOpen = false"
+          >
+            Dashboard
+          </RouterLink>
+          <template v-else>
+            <RouterLink class="btn-ghost text-center" to="/signin" @click="isMobileMenuOpen = false">
+              Sign In
+            </RouterLink>
+            <RouterLink class="btn-primary text-center" to="/signup" @click="isMobileMenuOpen = false">
+              Get Started
+            </RouterLink>
+          </template>
+        </div>
+      </div>
+    </Transition>
   </header>
 </template>

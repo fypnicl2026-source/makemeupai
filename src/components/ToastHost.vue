@@ -7,7 +7,7 @@ const { toast } = useToast();
 <template>
   <div
     v-if="toast.visible"
-    class="fixed left-1/2 top-6 z-[100] -translate-x-1/2 rounded-xl px-6 py-3 text-sm font-medium shadow-lg"
+    class="fixed left-1/2 top-6 z-[100] -translate-x-1/2 rounded-xl px-6 py-3 text-sm font-semibold shadow-elevated backdrop-blur-sm"
     :class="
       toast.type === 'success'
         ? 'border border-green-200 bg-green-50 text-green-800'

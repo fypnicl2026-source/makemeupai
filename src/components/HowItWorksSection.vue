@@ -27,86 +27,84 @@ function stepKey(step, index) {
 </script>
 
 <template>
-  <section id="how" class="border-y border-[#f0dce8] bg-white/60 py-14">
+  <section id="how" class="border-y border-brand-border bg-white/70 py-20 backdrop-blur-sm">
     <div class="container-shell">
-      <h2 class="mb-3 text-3xl font-semibold">Create Your Look in 4 Simple Steps</h2>
-      <p class="mb-6 max-w-2xl text-[#6f6176]">{{ howItWorksCompactIntro }}</p>
+      <p class="eyebrow mb-4">How It Works</p>
+      <h2 class="section-title mb-3">Create Your Look in 4 Simple Steps</h2>
+      <p class="section-subtitle mb-10">{{ howItWorksCompactIntro }}</p>
 
-      <div
-        v-if="variant === 'compact'"
-        class="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
-      >
+      <div v-if="variant === 'compact'" class="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         <article
           v-for="(step, index) in steps"
           :key="stepKey(step, index)"
-          class="glass-card p-4"
+          class="glass-card card-hover relative overflow-hidden p-5"
         >
           <div
-            class="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#ffe1f2] font-semibold text-brand-plum"
+            class="mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-brand-rose to-brand-lilac text-sm font-bold text-white shadow-soft"
           >
             {{ index + 1 }}
           </div>
-          <h3 class="mb-1 font-semibold text-[#1f1124]">{{ step.title }}</h3>
-          <p class="text-sm text-[#6f6176]">{{ step.summary }}</p>
+          <h3 class="mb-2 font-bold text-brand-ink">{{ step.title }}</h3>
+          <p class="text-sm leading-relaxed text-brand-muted">{{ step.summary }}</p>
         </article>
       </div>
 
-      <div v-else class="max-w-3xl space-y-6">
+      <div v-else class="max-w-3xl space-y-5">
         <article
           v-for="(step, index) in steps"
           :key="stepKey(step, index)"
-          class="glass-card flex gap-4 p-5"
+          class="glass-card card-hover flex gap-5 p-6"
         >
           <div
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ffe1f2] font-semibold text-brand-plum"
+            class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-rose to-brand-lilac font-bold text-white shadow-soft"
           >
             {{ index + 1 }}
           </div>
           <div>
-            <h3 class="text-lg font-semibold text-[#1f1124]">{{ step.title }}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-[#6f6176]">{{ step.detail }}</p>
-            <p v-if="step.tip" class="mt-3 text-xs text-brand-plum">
-              <span class="font-semibold">Tip:</span> {{ step.tip }}
+            <h3 class="text-lg font-bold text-brand-ink">{{ step.title }}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-brand-muted">{{ step.detail }}</p>
+            <p v-if="step.tip" class="mt-3 rounded-lg bg-brand-blush-deep px-3 py-2 text-xs text-brand-plum">
+              <span class="font-bold">Tip:</span> {{ step.tip }}
             </p>
           </div>
         </article>
       </div>
 
-      <p v-if="variant === 'compact'" class="mt-6 text-center">
+      <p v-if="variant === 'compact'" class="mt-8 text-center">
         <RouterLink
           to="/how-it-works"
-          class="text-sm font-semibold text-brand-plum hover:underline"
+          class="text-sm font-bold text-brand-plum transition-colors hover:text-brand-rose"
         >
           See full guide →
         </RouterLink>
       </p>
 
       <template v-if="variant === 'full'">
-        <div class="mt-12 glass-card p-5">
-          <h2 class="text-xl font-semibold text-brand-plum">What you need to get started</h2>
-          <ul class="mt-4 list-inside list-disc space-y-2 text-sm text-[#6f6176]">
+        <div class="mt-12 glass-card p-6">
+          <h2 class="text-xl font-bold text-brand-plum">What you need to get started</h2>
+          <ul class="mt-4 list-inside list-disc space-y-2 text-sm text-brand-muted">
             <li v-for="item in howItWorksGettingStarted" :key="item">{{ item }}</li>
           </ul>
         </div>
 
         <div class="mt-10">
-          <h2 class="mb-4 text-2xl font-semibold text-brand-plum">Common questions</h2>
+          <h2 class="mb-5 text-2xl font-bold text-brand-plum">Common questions</h2>
           <div class="space-y-3">
             <details
               v-for="item in howItWorksFaq"
               :key="item.question"
-              class="glass-card group p-4"
+              class="glass-card group p-5"
             >
-              <summary class="cursor-pointer font-semibold text-[#1f1124] list-none [&::-webkit-details-marker]:hidden">
-                <h3 class="inline text-base font-semibold">{{ item.question }}</h3>
+              <summary class="cursor-pointer list-none font-bold text-brand-ink [&::-webkit-details-marker]:hidden">
+                <h3 class="inline text-base">{{ item.question }}</h3>
               </summary>
-              <p class="mt-3 text-sm leading-relaxed text-[#6f6176]">{{ item.answer }}</p>
+              <p class="mt-3 text-sm leading-relaxed text-brand-muted">{{ item.answer }}</p>
             </details>
           </div>
         </div>
 
         <div class="mt-12 text-center">
-          <p class="mb-4 text-[#6f6176]">{{ howItWorksCta.line }}</p>
+          <p class="mb-5 text-brand-muted">{{ howItWorksCta.line }}</p>
           <div class="flex flex-wrap justify-center gap-3">
             <button type="button" class="btn-primary" @click="goTo(howItWorksCta.primaryRoute)">
               {{ howItWorksCta.primaryLabel }}
@@ -118,8 +116,8 @@ function stepKey(step, index) {
         </div>
       </template>
 
-      <div v-if="variant === 'compact'" class="mt-8 text-center">
-        <button type="button" class="btn-primary" @click="goTo('/signup')">Get Started</button>
+      <div v-if="variant === 'compact'" class="mt-10 text-center">
+        <button type="button" class="btn-primary px-8" @click="goTo('/signup')">Get Started</button>
       </div>
     </div>
   </section>

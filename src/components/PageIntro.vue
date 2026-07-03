@@ -16,11 +16,11 @@ defineProps({
 </script>
 
 <template>
-  <section class="border-b border-[#f0dce8] bg-white/40 py-12">
+  <section class="border-b border-brand-border bg-white/60 py-14 backdrop-blur-sm">
     <div class="container-shell max-w-3xl">
-      <h1 class="text-3xl font-bold text-brand-plum md:text-4xl">{{ title }}</h1>
-      <p v-if="subtitle" class="mt-2 text-lg font-medium text-[#1f1124]">{{ subtitle }}</p>
-      <p v-if="description" class="mt-4 text-[#6f6176] leading-relaxed">{{ description }}</p>
+      <h1 class="section-title gradient-text">{{ title }}</h1>
+      <p v-if="subtitle" class="mt-3 text-lg font-semibold text-brand-ink">{{ subtitle }}</p>
+      <p v-if="description" class="mt-4 leading-relaxed text-brand-muted">{{ description }}</p>
     </div>
   </section>
 </template>

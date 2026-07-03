@@ -151,7 +151,7 @@ class ApiSmokeTest extends TestCase
             ->assertJsonStructure(['data' => ['user', 'token']]);
     }
 
-    public function test_login_with_wrong_password_returns_422(): void
+    public function test_login_with_wrong_password_returns_401(): void
     {
         $this->makeUser([
             'email' => 'wrongpass@example.com',
@@ -163,8 +163,8 @@ class ApiSmokeTest extends TestCase
             'password' => 'wrong-password',
         ]);
 
-        $response->assertStatus(422)
-            ->assertJson(['success' => false]);
+        $response->assertStatus(401)
+            ->assertJson(['success' => false, 'message' => 'Invalid credentials.']);
     }
 
     public function test_get_auth_me_without_auth_returns_401(): void

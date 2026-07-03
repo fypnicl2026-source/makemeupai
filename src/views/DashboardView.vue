@@ -81,91 +81,81 @@ onMounted(async () => {
 <template>
   <DashboardLayout>
     <div v-if="loading" class="flex justify-center py-20">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#f0dce8] border-t-brand-rose"></div>
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose" />
     </div>
 
     <div v-else class="space-y-6">
       <section>
-        <h1 class="text-2xl font-bold text-brand-plum">
+        <h1 class="text-3xl font-bold text-brand-ink">
           {{ greeting }}, {{ authStore.user?.name }} 👋
         </h1>
-        <p class="mt-1 text-sm text-[#6f6176]">{{ todayDate }}</p>
+        <p class="mt-2 text-sm text-brand-muted">{{ todayDate }}</p>
       </section>
 
-      <section class="glass-card p-5">
-        <h2 class="text-lg font-semibold text-brand-plum">Wardrobe Snapshot</h2>
-        <p class="mt-2 text-sm text-[#6f6176]">
-          <span class="font-medium text-[#1f1124]">{{ wardrobeItems.length }} items</span>
-          <span v-if="categoryBreakdown"> — {{ categoryBreakdown }}</span>
-        </p>
-        <RouterLink to="/wardrobe" class="mt-4 inline-block text-sm font-semibold text-brand-plum hover:underline">
-          Go to Wardrobe →
-        </RouterLink>
-      </section>
-
-      <section class="glass-card p-5">
-        <h2 class="text-lg font-semibold text-brand-plum">Face Insights</h2>
-        <p class="mt-2 text-sm text-[#6f6176]">
-          Upload a selfie for style traits and makeup, hair, and mehndi suggestions.
-        </p>
-        <RouterLink
-          to="/face-insights"
-          class="mt-4 inline-block text-sm font-semibold text-brand-plum hover:underline"
-        >
-          Open Face Insights →
-        </RouterLink>
-      </section>
-
-      <section class="glass-card p-5">
-        <h2 class="text-lg font-semibold text-brand-plum">Outfit Suggestions</h2>
-        <p class="mt-2 text-sm text-[#6f6176]">Ready to plan your look?</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <button type="button" class="btn-ghost text-sm" @click="goToRecommendations('casual')">
-            Casual
-          </button>
-          <button type="button" class="btn-ghost text-sm" @click="goToRecommendations('work')">
-            Work
-          </button>
-          <button type="button" class="btn-ghost text-sm" @click="goToRecommendations('formal')">
-            Formal
-          </button>
-        </div>
-      </section>
-
-      <section class="glass-card p-5">
-        <h2 class="text-lg font-semibold text-brand-plum">Upcoming Bookings</h2>
-
-        <div v-if="upcomingBookings.length === 0" class="mt-3">
-          <p class="text-sm text-[#6f6176]">No bookings yet</p>
-          <RouterLink
-            to="/beauticians"
-            class="mt-2 inline-block text-sm font-semibold text-brand-plum hover:underline"
-          >
-            Browse Beauticians →
+      <div class="grid gap-5 md:grid-cols-2">
+        <section class="stat-tile">
+          <h2 class="text-lg font-bold text-brand-plum">Wardrobe Snapshot</h2>
+          <p class="mt-3 text-sm text-brand-muted">
+            <span class="font-semibold text-brand-ink">{{ wardrobeItems.length }} items</span>
+            <span v-if="categoryBreakdown"> — {{ categoryBreakdown }}</span>
+          </p>
+          <RouterLink to="/wardrobe" class="mt-4 inline-flex text-sm font-bold text-brand-plum hover:text-brand-rose">
+            Go to Wardrobe →
           </RouterLink>
-        </div>
+        </section>
 
-        <ul v-else class="mt-4 space-y-3">
-          <li
-            v-for="booking in upcomingBookings"
-            :key="booking.id"
-            class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#f0dce8] bg-white/60 px-4 py-3"
-          >
-            <div>
-              <p class="font-medium text-[#1f1124]">{{ booking.beautician.name }}</p>
-              <p class="text-sm text-[#6f6176]">
-                {{ booking.booking_date }} at {{ booking.booking_time }}
-              </p>
-            </div>
-            <span
-              class="rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize"
-              :class="statusClass(booking.status)"
+        <section class="stat-tile">
+          <h2 class="text-lg font-bold text-brand-plum">Face Insights</h2>
+          <p class="mt-3 text-sm text-brand-muted">
+            Upload a selfie for style traits and makeup, hair, and mehndi suggestions.
+          </p>
+          <RouterLink to="/face-insights" class="mt-4 inline-flex text-sm font-bold text-brand-plum hover:text-brand-rose">
+            Open Face Insights →
+          </RouterLink>
+        </section>
+
+        <section class="stat-tile">
+          <h2 class="text-lg font-bold text-brand-plum">Outfit Suggestions</h2>
+          <p class="mt-3 text-sm text-brand-muted">Ready to plan your look?</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <button type="button" class="btn-ghost text-sm" @click="goToRecommendations('casual')">Casual</button>
+            <button type="button" class="btn-ghost text-sm" @click="goToRecommendations('work')">Work</button>
+            <button type="button" class="btn-ghost text-sm" @click="goToRecommendations('formal')">Formal</button>
+          </div>
+        </section>
+
+        <section class="stat-tile">
+          <h2 class="text-lg font-bold text-brand-plum">Upcoming Bookings</h2>
+
+          <div v-if="upcomingBookings.length === 0" class="mt-3">
+            <p class="text-sm text-brand-muted">No bookings yet</p>
+            <RouterLink to="/beauticians" class="mt-2 inline-flex text-sm font-bold text-brand-plum hover:text-brand-rose">
+              Browse Beauticians →
+            </RouterLink>
+          </div>
+
+          <ul v-else class="mt-4 space-y-3">
+            <li
+              v-for="booking in upcomingBookings"
+              :key="booking.id"
+              class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-border bg-white/70 px-4 py-3"
             >
-              {{ booking.status }}
-            </span>
-          </li>
-        </ul>
-      </section>
+              <div>
+                <p class="font-semibold text-brand-ink">{{ booking.beautician.name }}</p>
+                <p class="text-sm text-brand-muted">
+                  {{ booking.booking_date }} at {{ booking.booking_time }}
+                </p>
+              </div>
+              <span
+                class="rounded-full px-2.5 py-0.5 text-xs font-bold capitalize"
+                :class="statusClass(booking.status)"
+              >
+                {{ booking.status }}
+              </span>
+            </li>
+          </ul>
+        </section>
+      </div>
     </div>
   </DashboardLayout>
 </template>

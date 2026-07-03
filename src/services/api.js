@@ -1,4 +1,5 @@
 import axios from "axios";
+import { triggerUnauthorized, triggerUnverified } from "./authEvents";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 const AUTH_TOKEN_KEY = "auth_token";
@@ -49,20 +50,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
-      const requestUrl = error.config?.url ?? "";
+    const status = error.response?.status;
+    const requestUrl = error.config?.url ?? "";
 
-      if (!requestUrl.includes("/api/auth/me")) {
-        setAuthToken(null);
-        const { authStore } = await import("../stores/auth.js");
-        authStore.user = null;
-        authStore.isLoggedIn = false;
+    if (status === 403 && error.response?.data?.code === "unverified") {
+      triggerUnverified();
+    }
 
-        const router = (await import("../router/index.js")).default;
-        if (router.currentRoute.value.path !== "/signin") {
-          await router.push("/signin");
-        }
-      }
+    if (status === 401 && !requestUrl.includes("/api/auth/me")) {
+      triggerUnauthorized();
     }
 
     return Promise.reject(error);

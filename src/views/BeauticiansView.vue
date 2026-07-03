@@ -93,16 +93,16 @@ onMounted(() => {
     <section class="container-shell py-10">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-brand-plum">Find the Right Beautician</h1>
-        <p class="mt-1 text-sm text-[#6f6176]">Browse professionals and book your next beauty session.</p>
+        <p class="mt-1 text-sm text-brand-muted">Browse professionals and book your next beauty session.</p>
       </div>
 
       <div class="mb-8 flex flex-wrap gap-4">
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="city-filter">City</label>
+          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="city-filter">City</label>
           <select
             id="city-filter"
             v-model="selectedCity"
-            class="rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-sm text-[#1f1124] outline-none focus:border-brand-rose"
+            class="rounded-xl border border-brand-border bg-white px-4 py-2.5 text-sm text-brand-ink outline-none focus:border-brand-rose"
           >
             <option v-for="city in CITIES" :key="city || 'all'" :value="city">
               {{ city || "All Cities" }}
@@ -110,11 +110,11 @@ onMounted(() => {
           </select>
         </div>
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="spec-filter">Specialization</label>
+          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="spec-filter">Specialization</label>
           <select
             id="spec-filter"
             v-model="selectedSpecialization"
-            class="rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-sm text-[#1f1124] outline-none focus:border-brand-rose"
+            class="rounded-xl border border-brand-border bg-white px-4 py-2.5 text-sm text-brand-ink outline-none focus:border-brand-rose"
           >
             <option v-for="spec in SPECIALIZATIONS" :key="spec || 'all'" :value="spec">
               {{ spec ? spec.charAt(0).toUpperCase() + spec.slice(1) : "All Specializations" }}
@@ -124,7 +124,7 @@ onMounted(() => {
       </div>
 
       <div v-if="loading" class="flex justify-center py-20">
-        <div class="h-10 w-10 animate-spin rounded-full border-4 border-[#f0dce8] border-t-brand-rose"></div>
+        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose"></div>
       </div>
 
       <div v-else-if="fetchError" class="glass-card px-6 py-12 text-center">
@@ -134,7 +134,7 @@ onMounted(() => {
 
       <div v-else-if="beauticians.length === 0" class="glass-card px-6 py-12 text-center">
         <p class="font-semibold text-brand-plum">No beauticians found</p>
-        <p class="mt-2 text-sm text-[#6f6176]">Try adjusting your filters.</p>
+        <p class="mt-2 text-sm text-brand-muted">Try adjusting your filters.</p>
       </div>
 
       <div v-else class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -153,8 +153,8 @@ onMounted(() => {
               {{ initials(b.name) }}
             </div>
             <div>
-              <h3 class="font-semibold text-[#1f1124]">{{ b.name }}</h3>
-              <p class="text-sm text-[#6f6176]">{{ b.city }}</p>
+              <h3 class="font-semibold text-brand-ink">{{ b.name }}</h3>
+              <p class="text-sm text-brand-muted">{{ b.city }}</p>
             </div>
           </div>
 
@@ -163,7 +163,7 @@ onMounted(() => {
               <span
                 v-for="spec in b.specializations"
                 :key="spec"
-                class="rounded-md bg-[#f0dce8]/60 px-2 py-0.5 text-xs capitalize text-[#6f6176]"
+                class="rounded-md bg-[#f0dce8]/60 px-2 py-0.5 text-xs capitalize text-brand-muted"
               >
                 {{ spec }}
               </span>

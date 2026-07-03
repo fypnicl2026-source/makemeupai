@@ -83,12 +83,12 @@ async function handleSubmit() {
 
       <form class="mt-4 space-y-4" @submit.prevent="handleSubmit">
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="service-type">Service Type</label>
+          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="service-type">Service Type</label>
           <select
             id="service-type"
             v-model="serviceType"
             required
-            class="w-full rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+            class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
           >
             <option value="" disabled>Select service</option>
             <option v-for="option in SERVICE_OPTIONS" :key="option" :value="option">
@@ -98,36 +98,36 @@ async function handleSubmit() {
         </div>
 
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="booking-date">Date</label>
+          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="booking-date">Date</label>
           <input
             id="booking-date"
             v-model="bookingDate"
             type="date"
             required
             :min="today"
-            class="w-full rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+            class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
           />
         </div>
 
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="booking-time">Time</label>
+          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="booking-time">Time</label>
           <input
             id="booking-time"
             v-model="bookingTime"
             type="time"
             required
-            class="w-full rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+            class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
           />
         </div>
 
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-[#6f6176]" for="booking-notes">Notes</label>
+          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="booking-notes">Notes</label>
           <textarea
             id="booking-notes"
             v-model="notes"
             rows="3"
             placeholder="Any special requests..."
-            class="w-full rounded-xl border border-[#f0dce8] bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+            class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
           ></textarea>
         </div>
 

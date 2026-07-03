@@ -54,47 +54,46 @@ onMounted(() => {
 </script>
 
 <template>
-  <section id="wardrobe" class="border-y border-[#f0dce8] bg-white/60 py-14">
+  <section id="wardrobe" class="border-y border-brand-border bg-white/70 py-20 backdrop-blur-sm">
     <div class="container-shell">
-      <h2 class="mb-6 text-3xl font-semibold">Your Smart Digital Wardrobe</h2>
+      <p class="eyebrow mb-4">Wardrobe</p>
+      <h2 class="section-title mb-10">Your Smart <span class="gradient-text">Digital Wardrobe</span></h2>
 
-      <div v-if="!authStore.isLoggedIn" class="glass-card p-5">
-        <p class="font-semibold">Your wardrobe is empty</p>
-        <p class="mt-1 text-sm text-[#6f6176]">
+      <div v-if="!authStore.isLoggedIn" class="glass-card p-8 text-center md:text-left">
+        <p class="text-lg font-bold text-brand-ink">Your wardrobe is empty</p>
+        <p class="mt-2 text-sm text-brand-muted">
           Create an account to upload clothes and get personalized outfit suggestions.
         </p>
-        <div class="mt-4 flex flex-wrap gap-2">
+        <div class="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
           <button type="button" class="btn-primary" @click="goTo('/signup')">Get Started</button>
           <button type="button" class="btn-ghost" @click="goTo('/signin')">Sign In</button>
         </div>
       </div>
 
-      <div v-else-if="loading" class="flex justify-center py-12">
-        <div
-          class="h-10 w-10 animate-spin rounded-full border-4 border-[#f0dce8] border-t-brand-rose"
-        ></div>
+      <div v-else-if="loading" class="flex justify-center py-16">
+        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose" />
       </div>
 
-      <div v-else-if="fetchError" class="glass-card px-6 py-8 text-center">
-        <p class="font-semibold text-brand-plum">{{ fetchError }}</p>
+      <div v-else-if="fetchError" class="glass-card px-6 py-10 text-center">
+        <p class="font-bold text-brand-plum">{{ fetchError }}</p>
         <button type="button" class="btn-primary mt-4" @click="fetchWardrobe">Try Again</button>
       </div>
 
-      <div v-else class="glass-card p-5">
+      <div v-else class="glass-card p-8">
         <template v-if="isEmpty">
-          <p class="font-semibold">Your wardrobe is empty</p>
-          <p class="mt-1 text-sm text-[#6f6176]">
+          <p class="text-lg font-bold text-brand-ink">Your wardrobe is empty</p>
+          <p class="mt-2 text-sm text-brand-muted">
             Add your first item to start getting outfit suggestions.
           </p>
         </template>
         <template v-else>
-          <p class="font-semibold">Wardrobe snapshot</p>
-          <p class="mt-2 text-sm text-[#6f6176]">
-            <span class="font-medium text-[#1f1124]">{{ wardrobeItems.length }} items</span>
+          <p class="text-lg font-bold text-brand-ink">Wardrobe snapshot</p>
+          <p class="mt-2 text-sm text-brand-muted">
+            <span class="font-semibold text-brand-ink">{{ wardrobeItems.length }} items</span>
             <span v-if="categoryBreakdown"> — {{ categoryBreakdown }}</span>
           </p>
         </template>
-        <div class="mt-4 flex flex-wrap gap-2">
+        <div class="mt-6 flex flex-wrap gap-3">
           <button type="button" class="btn-primary" @click="goToProtected('/wardrobe')">
             Manage Wardrobe
           </button>

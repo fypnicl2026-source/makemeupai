@@ -100,7 +100,7 @@ onMounted(() => {
     <section class="container-shell py-10">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-brand-plum">Outfit Recommendations</h1>
-        <p class="mt-1 text-sm text-[#6f6176]">
+        <p class="mt-1 text-sm text-brand-muted">
           Get personalized outfit suggestions based on your wardrobe and local weather.
         </p>
       </div>
@@ -114,7 +114,7 @@ onMounted(() => {
           :class="
             selectedOccasion === occasion.value
               ? 'bg-[#fff0f5] font-semibold text-brand-plum ring-1 ring-brand-rose'
-              : 'bg-white text-[#6f6176] hover:text-brand-plum'
+              : 'bg-white text-brand-muted hover:text-brand-plum'
           "
           @click="selectedOccasion = occasion.value"
         >
@@ -150,14 +150,14 @@ onMounted(() => {
           <circle cx="60" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="white" />
         </svg>
         <p class="text-lg font-semibold text-brand-plum">Ready for your next look?</p>
-        <p class="mt-2 text-sm text-[#6f6176]">Select an occasion and click Get My Outfit</p>
+        <p class="mt-2 text-sm text-brand-muted">Select an occasion and click Get My Outfit</p>
       </div>
 
       <div v-else-if="loading" class="flex flex-col items-center py-20">
         <div
-          class="h-10 w-10 animate-spin rounded-full border-4 border-[#f0dce8] border-t-brand-rose"
+          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose"
         ></div>
-        <p class="mt-4 text-sm text-[#6f6176]">Finding your perfect outfit...</p>
+        <p class="mt-4 text-sm text-brand-muted">Finding your perfect outfit...</p>
       </div>
 
       <div v-else-if="error" class="glass-card px-6 py-12 text-center">
@@ -167,7 +167,7 @@ onMounted(() => {
 
       <div v-else-if="combinations.length === 0" class="glass-card px-6 py-12 text-center">
         <p class="font-semibold text-brand-plum">Add at least 3 items to your wardrobe first</p>
-        <p class="mt-2 text-sm text-[#6f6176]">
+        <p class="mt-2 text-sm text-brand-muted">
           We need more clothing items to build outfit combinations for you.
         </p>
         <RouterLink to="/wardrobe" class="btn-primary mt-6 inline-block">Go to Wardrobe</RouterLink>
@@ -194,7 +194,7 @@ onMounted(() => {
                 :key="item.id"
                 class="w-20 text-center"
               >
-                <div class="aspect-square overflow-hidden rounded-xl border border-[#f0dce8]">
+                <div class="aspect-square overflow-hidden rounded-xl border border-brand-border">
                   <img
                     v-if="item.image_url"
                     :src="item.image_url"
@@ -211,7 +211,7 @@ onMounted(() => {
                     </span>
                   </div>
                 </div>
-                <p class="mt-1 text-xs capitalize text-[#6f6176]">{{ item.category }}</p>
+                <p class="mt-1 text-xs capitalize text-brand-muted">{{ item.category }}</p>
               </div>
             </div>
           </article>
