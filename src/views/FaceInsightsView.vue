@@ -142,7 +142,7 @@ onMounted(() => {
 
       <div v-if="loadingProfile" class="flex justify-center py-16">
         <div
-          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose"
+          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose"
         ></div>
       </div>
 
@@ -155,7 +155,7 @@ onMounted(() => {
 
           <div class="mt-4 flex flex-wrap items-start gap-6">
             <div
-              class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border border-brand-border bg-[#fff0f5] text-sm text-brand-muted"
+              class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border border-brand-line bg-[#fff0f5] text-sm text-brand-muted"
             >
               <img
                 v-if="profilePhotoUrl"
@@ -191,19 +191,19 @@ onMounted(() => {
             Heuristic style analysis (MVP) — suggestions tailored to these traits.
           </p>
           <dl class="mt-4 grid gap-3 sm:grid-cols-3">
-            <div class="rounded-xl border border-brand-border bg-white/60 px-4 py-3">
+            <div class="rounded-xl border border-brand-line bg-white/60 px-4 py-3">
               <dt class="text-xs font-medium text-brand-muted">Face shape</dt>
               <dd class="mt-1 font-semibold capitalize text-brand-ink">
                 {{ formatLabel(faceTraits.faceShape) }}
               </dd>
             </div>
-            <div class="rounded-xl border border-brand-border bg-white/60 px-4 py-3">
+            <div class="rounded-xl border border-brand-line bg-white/60 px-4 py-3">
               <dt class="text-xs font-medium text-brand-muted">Skin tone</dt>
               <dd class="mt-1 font-semibold capitalize text-brand-ink">
                 {{ formatLabel(faceTraits.skinTone) }}
               </dd>
             </div>
-            <div class="rounded-xl border border-brand-border bg-white/60 px-4 py-3">
+            <div class="rounded-xl border border-brand-line bg-white/60 px-4 py-3">
               <dt class="text-xs font-medium text-brand-muted">Hair length</dt>
               <dd class="mt-1 font-semibold capitalize text-brand-ink">
                 {{ formatLabel(faceTraits.hairLength) }}
@@ -270,19 +270,19 @@ onMounted(() => {
         <section v-if="lookResults" class="glass-card mb-6 p-5">
           <h2 class="text-lg font-semibold text-brand-plum">Your look suggestions</h2>
           <div class="mt-4 grid gap-4 md:grid-cols-3">
-            <div class="rounded-xl border border-brand-border bg-white/60 p-4">
+            <div class="rounded-xl border border-brand-line bg-white/60 p-4">
               <h3 class="font-semibold text-brand-plum">Makeup</h3>
               <ul class="mt-2 space-y-1 text-sm text-brand-muted">
                 <li v-for="item in lookResults.makeup" :key="item">{{ item }}</li>
               </ul>
             </div>
-            <div class="rounded-xl border border-brand-border bg-white/60 p-4">
+            <div class="rounded-xl border border-brand-line bg-white/60 p-4">
               <h3 class="font-semibold text-brand-plum">Hairstyle</h3>
               <ul class="mt-2 space-y-1 text-sm text-brand-muted">
                 <li v-for="item in lookResults.hairstyle" :key="item">{{ item }}</li>
               </ul>
             </div>
-            <div class="rounded-xl border border-brand-border bg-white/60 p-4">
+            <div class="rounded-xl border border-brand-line bg-white/60 p-4">
               <h3 class="font-semibold text-brand-plum">Mehndi</h3>
               <ul class="mt-2 space-y-1 text-sm text-brand-muted">
                 <li v-for="item in lookResults.mehndi" :key="item">{{ item }}</li>

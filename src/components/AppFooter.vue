@@ -8,7 +8,7 @@ const footerLinks = navLinks.filter((link) => link.to !== "/wardrobe");
 </script>
 
 <template>
-  <footer class="mt-auto border-t border-brand-border bg-white/90 py-12 backdrop-blur-sm">
+  <footer class="mt-auto border-t border-brand-line bg-white/90 py-12 backdrop-blur-sm">
     <div class="container-shell grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
       <div>
         <BrandLogo size="md" />

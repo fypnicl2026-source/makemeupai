@@ -16,7 +16,7 @@ defineProps({
 </script>
 
 <template>
-  <section class="border-b border-brand-border bg-white/60 py-14 backdrop-blur-sm">
+  <section class="border-b border-brand-line bg-white/60 py-14 backdrop-blur-sm">
     <div class="container-shell max-w-3xl">
       <h1 class="section-title gradient-text">{{ title }}</h1>
       <p v-if="subtitle" class="mt-3 text-lg font-semibold text-brand-ink">{{ subtitle }}</p>

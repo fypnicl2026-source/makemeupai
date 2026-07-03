@@ -102,7 +102,7 @@ onMounted(() => {
           <select
             id="city-filter"
             v-model="selectedCity"
-            class="rounded-xl border border-brand-border bg-white px-4 py-2.5 text-sm text-brand-ink outline-none focus:border-brand-rose"
+            class="rounded-xl border border-brand-line bg-white px-4 py-2.5 text-sm text-brand-ink outline-none focus:border-brand-rose"
           >
             <option v-for="city in CITIES" :key="city || 'all'" :value="city">
               {{ city || "All Cities" }}
@@ -114,7 +114,7 @@ onMounted(() => {
           <select
             id="spec-filter"
             v-model="selectedSpecialization"
-            class="rounded-xl border border-brand-border bg-white px-4 py-2.5 text-sm text-brand-ink outline-none focus:border-brand-rose"
+            class="rounded-xl border border-brand-line bg-white px-4 py-2.5 text-sm text-brand-ink outline-none focus:border-brand-rose"
           >
             <option v-for="spec in SPECIALIZATIONS" :key="spec || 'all'" :value="spec">
               {{ spec ? spec.charAt(0).toUpperCase() + spec.slice(1) : "All Specializations" }}
@@ -124,7 +124,7 @@ onMounted(() => {
       </div>
 
       <div v-if="loading" class="flex justify-center py-20">
-        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose"></div>
+        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose"></div>
       </div>
 
       <div v-else-if="fetchError" class="glass-card px-6 py-12 text-center">

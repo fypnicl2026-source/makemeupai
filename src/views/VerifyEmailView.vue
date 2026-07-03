@@ -64,7 +64,7 @@ async function handleResend() {
         </template>
 
         <template v-else>
-          <div class="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose" />
+          <div class="mx-auto mb-6 h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose" />
           <h1 class="text-2xl font-bold text-brand-ink">Verifying email...</h1>
           <p class="mt-3 text-sm text-brand-muted">Please wait while we confirm your verification status.</p>
         </template>

@@ -6,8 +6,10 @@
 
 @layer base {
   body {
-    @apply m-0 bg-brand-blush text-brand-ink antialiased;
+    @apply m-0 antialiased;
     font-family: Inter, system-ui, sans-serif;
+    color: theme("colors.brand.ink");
+    background-color: theme("colors.brand.blush");
     background-image: theme("backgroundImage.hero-mesh"),
       radial-gradient(circle at top right, #ffe1f2 0%, #fff7fb 40%, #fff 100%);
     background-attachment: fixed;
@@ -16,7 +18,8 @@
   h1,
   h2,
   h3 {
-    @apply tracking-tight text-brand-ink;
+    @apply tracking-tight;
+    color: theme("colors.brand.ink");
   }
 }
 
@@ -26,15 +29,27 @@
   }
 
   .glass-card {
-    @apply rounded-2xl border border-brand-border/80 bg-white/90 shadow-soft backdrop-blur-md;
+    @apply rounded-2xl border backdrop-blur-md;
+    border-color: color-mix(in srgb, theme("colors.brand.line") 80%, transparent);
+    background-color: rgb(255 255 255 / 0.9);
+    box-shadow: theme("boxShadow.soft");
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-rose/30 hover:shadow-elevated;
+    @apply transition-all duration-300;
+  }
+
+  .card-hover:hover {
+    @apply -translate-y-0.5;
+    border-color: color-mix(in srgb, theme("colors.brand.rose") 30%, transparent);
+    box-shadow: theme("boxShadow.elevated");
   }
 
   .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full border border-brand-rose/20 bg-brand-blush-deep/80 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-brand-plum;
+    @apply inline-flex items-center gap-2 rounded-full border px-3.5 py-1 text-xs font-semibold uppercase tracking-wider;
+    border-color: color-mix(in srgb, theme("colors.brand.rose") 20%, transparent);
+    background-color: color-mix(in srgb, theme("colors.brand.blush-deep") 80%, transparent);
+    color: theme("colors.brand.plum");
   }
 
   .section-title {
@@ -42,42 +57,121 @@
   }
 
   .section-subtitle {
-    @apply mt-3 max-w-2xl text-base leading-relaxed text-brand-muted;
+    @apply mt-3 max-w-2xl text-base leading-relaxed;
+    color: theme("colors.brand.muted");
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-brand-plum via-brand-rose to-brand-lilac bg-clip-text text-transparent;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      to right,
+      theme("colors.brand.plum"),
+      theme("colors.brand.rose"),
+      theme("colors.brand.lilac")
+    );
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-xl border border-transparent bg-gradient-to-r from-brand-rose to-brand-rose-light px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:shadow-glow-sm hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-brand-rose/40 focus:ring-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center rounded-xl border border-transparent px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60;
+    background-image: linear-gradient(
+      to right,
+      theme("colors.brand.rose"),
+      theme("colors.brand.rose-light")
+    );
+    box-shadow: theme("boxShadow.soft");
+  }
+
+  .btn-primary:hover {
+    box-shadow: theme("boxShadow.glow-sm");
+  }
+
+  .btn-primary:focus {
+    --tw-ring-color: color-mix(in srgb, theme("colors.brand.rose") 40%, transparent);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-xl border border-transparent bg-gradient-to-r from-brand-lilac to-brand-lilac-light px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:shadow-glow-sm hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-brand-lilac/40 focus:ring-offset-2 active:scale-[0.98];
+    @apply inline-flex items-center justify-center rounded-xl border border-transparent px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98];
+    background-image: linear-gradient(
+      to right,
+      theme("colors.brand.lilac"),
+      theme("colors.brand.lilac-light")
+    );
+    box-shadow: theme("boxShadow.soft");
+  }
+
+  .btn-secondary:hover {
+    box-shadow: theme("boxShadow.glow-sm");
+  }
+
+  .btn-secondary:focus {
+    --tw-ring-color: color-mix(in srgb, theme("colors.brand.lilac") 40%, transparent);
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-xl border border-brand-border bg-white/90 px-5 py-2.5 text-sm font-semibold text-brand-plum shadow-sm transition-all duration-200 hover:border-brand-rose/30 hover:bg-brand-blush-deep hover:shadow-soft focus:outline-none focus:ring-2 focus:ring-brand-rose/20 focus:ring-offset-2 active:scale-[0.98];
+    @apply inline-flex items-center justify-center rounded-xl border px-5 py-2.5 text-sm font-semibold shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98];
+    border-color: theme("colors.brand.line");
+    background-color: rgb(255 255 255 / 0.9);
+    color: theme("colors.brand.plum");
+  }
+
+  .btn-ghost:hover {
+    border-color: color-mix(in srgb, theme("colors.brand.rose") 30%, transparent);
+    background-color: theme("colors.brand.blush-deep");
+    box-shadow: theme("boxShadow.soft");
+  }
+
+  .btn-ghost:focus {
+    --tw-ring-color: color-mix(in srgb, theme("colors.brand.rose") 20%, transparent);
   }
 
   .input-field {
-    @apply w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-brand-ink outline-none transition-all placeholder:text-brand-muted/60 focus:border-brand-rose focus:ring-2 focus:ring-brand-rose/15;
+    @apply w-full rounded-xl border bg-white px-4 py-2.5 outline-none transition-all focus:ring-2;
+    border-color: theme("colors.brand.line");
+    color: theme("colors.brand.ink");
+  }
+
+  .input-field::placeholder {
+    color: color-mix(in srgb, theme("colors.brand.muted") 60%, transparent);
+  }
+
+  .input-field:focus {
+    border-color: theme("colors.brand.rose");
+    --tw-ring-color: color-mix(in srgb, theme("colors.brand.rose") 15%, transparent);
   }
 
   .nav-link {
-    @apply rounded-lg px-3 py-2 text-sm font-medium text-brand-muted transition-colors hover:bg-brand-blush-deep hover:text-brand-plum;
+    @apply rounded-lg px-3 py-2 text-sm font-medium transition-colors;
+    color: theme("colors.brand.muted");
+  }
+
+  .nav-link:hover {
+    background-color: theme("colors.brand.blush-deep");
+    color: theme("colors.brand.plum");
   }
 
   .nav-link-active {
-    @apply bg-brand-blush-deep font-semibold text-brand-plum;
+    @apply font-semibold;
+    background-color: theme("colors.brand.blush-deep");
+    color: theme("colors.brand.plum");
   }
 
   .stat-tile {
-    @apply glass-card card-hover p-5;
+    @apply rounded-2xl border p-5 backdrop-blur-md transition-all duration-300;
+    border-color: color-mix(in srgb, theme("colors.brand.line") 80%, transparent);
+    background-color: rgb(255 255 255 / 0.9);
+    box-shadow: theme("boxShadow.soft");
+  }
+
+  .stat-tile:hover {
+    @apply -translate-y-0.5;
+    border-color: color-mix(in srgb, theme("colors.brand.rose") 30%, transparent);
+    box-shadow: theme("boxShadow.elevated");
   }
 
   .auth-card {
-    @apply glass-card mx-auto w-full max-w-md p-8 shadow-elevated animate-fade-in;
+    @apply mx-auto w-full max-w-md p-8 animate-fade-in rounded-2xl border backdrop-blur-md;
+    border-color: color-mix(in srgb, theme("colors.brand.line") 80%, transparent);
+    background-color: rgb(255 255 255 / 0.9);
+    box-shadow: theme("boxShadow.elevated");
   }
 }

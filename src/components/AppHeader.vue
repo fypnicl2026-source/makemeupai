@@ -26,7 +26,7 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
     :class="[
       'sticky top-0 z-50 border-b transition-all duration-300',
       isScrolled
-        ? 'border-brand-border/80 bg-white/95 shadow-soft backdrop-blur-lg'
+        ? 'border-brand-line/80 bg-white/95 shadow-soft backdrop-blur-lg'
         : 'border-transparent bg-brand-blush/80 backdrop-blur-md',
     ]"
   >
@@ -35,7 +35,7 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
 
       <button
         type="button"
-        class="rounded-xl border border-brand-border bg-white px-3 py-2 text-sm font-semibold text-brand-plum shadow-sm md:hidden"
+        class="rounded-xl border border-brand-line bg-white px-3 py-2 text-sm font-semibold text-brand-plum shadow-sm md:hidden"
         aria-label="Toggle menu"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
       >
@@ -75,7 +75,7 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
     >
       <div
         v-if="isMobileMenuOpen"
-        class="container-shell mb-4 flex flex-col gap-1 rounded-2xl border border-brand-border bg-white p-3 shadow-elevated md:hidden"
+        class="container-shell mb-4 flex flex-col gap-1 rounded-2xl border border-brand-line bg-white p-3 shadow-elevated md:hidden"
       >
         <RouterLink
           v-for="link in links"
@@ -87,7 +87,7 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
         >
           {{ link.label }}
         </RouterLink>
-        <div class="mt-2 flex flex-col gap-2 border-t border-brand-border pt-3">
+        <div class="mt-2 flex flex-col gap-2 border-t border-brand-line pt-3">
           <RouterLink
             v-if="authStore.isLoggedIn"
             class="btn-primary text-center"

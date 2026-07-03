@@ -155,7 +155,7 @@ onMounted(() => {
 
       <div v-else-if="loading" class="flex flex-col items-center py-20">
         <div
-          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose"
+          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose"
         ></div>
         <p class="mt-4 text-sm text-brand-muted">Finding your perfect outfit...</p>
       </div>
@@ -194,7 +194,7 @@ onMounted(() => {
                 :key="item.id"
                 class="w-20 text-center"
               >
-                <div class="aspect-square overflow-hidden rounded-xl border border-brand-border">
+                <div class="aspect-square overflow-hidden rounded-xl border border-brand-line">
                   <img
                     v-if="item.image_url"
                     :src="item.image_url"

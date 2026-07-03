@@ -54,7 +54,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section id="wardrobe" class="border-y border-brand-border bg-white/70 py-20 backdrop-blur-sm">
+  <section id="wardrobe" class="border-y border-brand-line bg-white/70 py-20 backdrop-blur-sm">
     <div class="container-shell">
       <p class="eyebrow mb-4">Wardrobe</p>
       <h2 class="section-title mb-10">Your Smart <span class="gradient-text">Digital Wardrobe</span></h2>
@@ -71,7 +71,7 @@ onMounted(() => {
       </div>
 
       <div v-else-if="loading" class="flex justify-center py-16">
-        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose" />
+        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose" />
       </div>
 
       <div v-else-if="fetchError" class="glass-card px-6 py-10 text-center">

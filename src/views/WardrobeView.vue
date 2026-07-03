@@ -198,7 +198,7 @@ onMounted(() => {
         <p class="mt-1 text-sm text-brand-muted">Manage your clothing items and get better outfit suggestions.</p>
       </div>
 
-      <div class="mb-8 flex gap-1 overflow-x-auto border-b border-brand-border pb-1">
+      <div class="mb-8 flex gap-1 overflow-x-auto border-b border-brand-line pb-1">
         <button
           v-for="cat in CATEGORIES"
           :key="cat.label"
@@ -217,7 +217,7 @@ onMounted(() => {
 
       <div v-if="loading" class="flex justify-center py-20">
         <div
-          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose"
+          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose"
         ></div>
       </div>
 
@@ -320,7 +320,7 @@ onMounted(() => {
               v-model="name"
               type="text"
               required
-              class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
+              class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
             />
           </div>
 
@@ -330,7 +330,7 @@ onMounted(() => {
               id="item-category"
               v-model="category"
               required
-              class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
+              class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
             >
               <option value="" disabled>Select category</option>
               <option v-for="cat in CATEGORIES.filter((c) => c.value)" :key="cat.value" :value="cat.value">
@@ -347,7 +347,7 @@ onMounted(() => {
               type="text"
               placeholder="e.g. red, black"
               required
-              class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
+              class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
             />
           </div>
 
@@ -358,7 +358,7 @@ onMounted(() => {
                 <input
                   type="checkbox"
                   :checked="selectedSeasons.includes(season)"
-                  class="rounded border-brand-border text-brand-rose focus:ring-brand-rose"
+                  class="rounded border-brand-line text-brand-rose focus:ring-brand-rose"
                   @change="toggleSeason(season)"
                 />
                 {{ season }}
@@ -373,7 +373,7 @@ onMounted(() => {
                 <input
                   type="checkbox"
                   :checked="selectedOccasions.includes(occasion)"
-                  class="rounded border-brand-border text-brand-rose focus:ring-brand-rose"
+                  class="rounded border-brand-line text-brand-rose focus:ring-brand-rose"
                   @change="toggleOccasion(occasion)"
                 />
                 {{ occasion }}
@@ -398,7 +398,7 @@ onMounted(() => {
               id="item-notes"
               v-model="notes"
               rows="3"
-              class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
+              class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-brand-ink outline-none focus:border-brand-rose"
             ></textarea>
           </div>
 

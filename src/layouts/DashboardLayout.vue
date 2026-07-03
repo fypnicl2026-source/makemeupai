@@ -32,10 +32,10 @@ async function handleSignOut() {
 <template>
   <div class="min-h-screen bg-brand-blush">
     <div class="flex min-h-screen flex-col md:flex-row">
-      <aside class="hidden w-64 shrink-0 border-r border-brand-border bg-white/90 p-6 backdrop-blur-md md:block">
+      <aside class="hidden w-64 shrink-0 border-r border-brand-line bg-white/90 p-6 backdrop-blur-md md:block">
         <BrandLogo size="sm" to="/dashboard" class="mb-8" />
 
-        <div class="mb-8 flex items-center gap-3 rounded-2xl border border-brand-border bg-brand-blush-deep/50 p-3">
+        <div class="mb-8 flex items-center gap-3 rounded-2xl border border-brand-line bg-brand-blush-deep/50 p-3">
           <img
             v-if="authStore.user?.profile_photo_url"
             :src="authStore.user.profile_photo_url"
@@ -77,21 +77,21 @@ async function handleSignOut() {
       </aside>
 
       <div class="flex flex-1 flex-col">
-        <header class="border-b border-brand-border bg-white/90 p-4 backdrop-blur-md md:hidden">
+        <header class="border-b border-brand-line bg-white/90 p-4 backdrop-blur-md md:hidden">
           <BrandLogo size="sm" to="/dashboard" class="mb-3" />
           <nav class="flex gap-2 overflow-x-auto pb-1">
             <RouterLink
               v-for="link in navLinks"
               :key="`mobile-${link.to}`"
               :to="link.to"
-              class="whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-medium text-brand-muted ring-1 ring-brand-border transition-all"
+              class="whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-medium text-brand-muted ring-1 ring-brand-line transition-all"
               active-class="!bg-brand-blush-deep !font-semibold !text-brand-plum !ring-brand-rose/40"
             >
               {{ link.label }}
             </RouterLink>
             <button
               type="button"
-              class="whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-medium text-brand-muted ring-1 ring-brand-border"
+              class="whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-medium text-brand-muted ring-1 ring-brand-line"
               @click="handleSignOut"
             >
               Sign Out

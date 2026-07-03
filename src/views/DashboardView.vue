@@ -81,7 +81,7 @@ onMounted(async () => {
 <template>
   <DashboardLayout>
     <div v-if="loading" class="flex justify-center py-20">
-      <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose" />
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose" />
     </div>
 
     <div v-else class="space-y-6">
@@ -138,7 +138,7 @@ onMounted(async () => {
             <li
               v-for="booking in upcomingBookings"
               :key="booking.id"
-              class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-border bg-white/70 px-4 py-3"
+              class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-line bg-white/70 px-4 py-3"
             >
               <div>
                 <p class="font-semibold text-brand-ink">{{ booking.beautician.name }}</p>

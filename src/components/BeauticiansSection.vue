@@ -72,7 +72,7 @@ onMounted(() => {
       </h2>
 
       <div v-if="loading" class="flex justify-center py-16">
-        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-border border-t-brand-rose" />
+        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose" />
       </div>
 
       <div v-else-if="fetchError" class="glass-card px-6 py-14 text-center">

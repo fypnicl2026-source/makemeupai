@@ -88,7 +88,7 @@ async function handleSubmit() {
             id="service-type"
             v-model="serviceType"
             required
-            class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+            class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
           >
             <option value="" disabled>Select service</option>
             <option v-for="option in SERVICE_OPTIONS" :key="option" :value="option">
@@ -105,7 +105,7 @@ async function handleSubmit() {
             type="date"
             required
             :min="today"
-            class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+            class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
           />
         </div>
 
@@ -116,7 +116,7 @@ async function handleSubmit() {
             v-model="bookingTime"
             type="time"
             required
-            class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+            class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
           />
         </div>
 
@@ -127,7 +127,7 @@ async function handleSubmit() {
             v-model="notes"
             rows="3"
             placeholder="Any special requests..."
-            class="w-full rounded-xl border border-brand-border bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
+            class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
           ></textarea>
         </div>
 

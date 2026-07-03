@@ -75,7 +75,7 @@ async function handleSubmit() {
 
           <div class="flex items-center justify-between text-sm">
             <label class="flex items-center gap-2 text-brand-muted">
-              <input v-model="remember" type="checkbox" class="rounded border-brand-border text-brand-rose focus:ring-brand-rose/30" />
+              <input v-model="remember" type="checkbox" class="rounded border-brand-line text-brand-rose focus:ring-brand-rose/30" />
               Remember me
             </label>
             <RouterLink class="font-semibold text-brand-plum hover:text-brand-rose" to="/forgot-password">

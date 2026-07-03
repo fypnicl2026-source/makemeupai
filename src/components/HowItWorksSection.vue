@@ -27,7 +27,7 @@ function stepKey(step, index) {
 </script>
 
 <template>
-  <section id="how" class="border-y border-brand-border bg-white/70 py-20 backdrop-blur-sm">
+  <section id="how" class="border-y border-brand-line bg-white/70 py-20 backdrop-blur-sm">
     <div class="container-shell">
       <p class="eyebrow mb-4">How It Works</p>
       <h2 class="section-title mb-3">Create Your Look in 4 Simple Steps</h2>

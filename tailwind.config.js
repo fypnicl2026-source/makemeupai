@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx,css}"],
   theme: {
     extend: {
       colors: {
@@ -16,7 +16,7 @@ export default {
           gold: "#c9a227",
           ink: "#1f1124",
           muted: "#6f6176",
-          border: "#f0dce8",
+          line: "#f0dce8",
         },
       },
       fontFamily: {
