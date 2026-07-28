@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -137,8 +136,9 @@ class AuthController extends Controller
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function (User $user, string $password) {
+                // Plain value — User model `password` => `hashed` cast hashes once.
                 $user->forceFill([
-                    'password' => Hash::make($password),
+                    'password' => $password,
                 ])->setRememberToken(Str::random(60));
 
                 $user->save();
@@ -149,6 +149,14 @@ class AuthController extends Controller
 
         if ($status !== Password::PASSWORD_RESET) {
             return $this->error(__($status), null, 422);
+        }
+
+        // Drop the current session so Sanctum AuthenticateSession does not reject
+        // the next login with a stale password_hash_* after the password change.
+        if ($request->hasSession()) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
 
         return $this->success(null, 'Password has been reset.');

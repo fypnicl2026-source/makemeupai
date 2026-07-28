@@ -62,6 +62,11 @@ class PasswordResetTest extends TestCase
         $this->getJson('/api/wardrobe', [
             'Authorization' => 'Bearer '.$oldToken,
         ])->assertUnauthorized();
+
+        $this->withStatefulFrontend()->postJson('/api/auth/login', [
+            'email' => 'reset@example.com',
+            'password' => 'newpassword123',
+        ])->assertOk();
     }
 
     public function test_expired_reset_token_is_rejected(): void
