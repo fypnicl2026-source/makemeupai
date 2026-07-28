@@ -9,7 +9,7 @@ Hybrid setup: Vue SPA on **Vercel**, Laravel API on **Railway**, PostgreSQL on R
 | Service | Platform | URL |
 |---------|----------|-----|
 | Frontend | Vercel | https://makemeupai.vercel.app |
-| Backend API | Railway | `https://api-production-6988b.up.railway.app` |
+| Backend API | Railway | `https://api-production-1bae0.up.railway.app` |
 | Database | Railway PostgreSQL | via `DATABASE_URL` |
 
 ```
