@@ -114,7 +114,6 @@ makemeupai/
 ### 1. Clone and install
 
 ```powershell
-git clone https://github.com/Huzaifa690-arch/makemeupai.git
 cd makemeupai
 npm install
 copy .env.example .env.local
