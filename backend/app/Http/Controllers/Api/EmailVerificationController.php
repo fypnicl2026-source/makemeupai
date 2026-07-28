@@ -61,7 +61,17 @@ class EmailVerificationController extends Controller
 
         RateLimiter::hit($key, 60);
 
-        $user->sendEmailVerificationNotification();
+        try {
+            $user->sendEmailVerificationNotification();
+        } catch (\Throwable $e) {
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Unable to send verification email. Please try again shortly.',
+                'data' => (object) [],
+            ], 503);
+        }
 
         return response()->json([
             'success' => true,

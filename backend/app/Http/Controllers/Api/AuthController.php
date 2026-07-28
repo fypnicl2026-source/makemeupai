@@ -37,7 +37,11 @@ class AuthController extends Controller
             'profile_photo' => $validated['profile_photo'] ?? null,
         ]);
 
-        event(new Registered($user));
+        try {
+            event(new Registered($user));
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         Auth::login($user);
         $request->session()->regenerate();

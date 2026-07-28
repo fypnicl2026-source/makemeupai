@@ -66,11 +66,16 @@ Set on the **web/API service** (not only on Postgres):
 | `SESSION_SAME_SITE` | Yes | `none` |
 | `SESSION_DOMAIN` | Yes | Leave **empty** |
 | `FILESYSTEM_DISK` | Yes | `public` |
-| `MAIL_MAILER` | For email features | `smtp` (or provider driver) |
-| `MAIL_HOST` / `MAIL_PORT` / `MAIL_USERNAME` / `MAIL_PASSWORD` | For email features | From your SMTP provider |
-| `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` | For email features | e.g. `hello@makemeupai.com` / `MakemeupAI` |
+| `MAIL_MAILER` | For email features | `smtp` |
+| `MAIL_HOST` | For email features | `live.smtp.mailtrap.io` (Mailtrap Sending) |
+| `MAIL_PORT` | For email features | `587` |
+| `MAIL_USERNAME` | For email features | `api` |
+| `MAIL_PASSWORD` | For email features | Mailtrap API token (Settings → API Tokens) |
+| `MAIL_FROM_ADDRESS` / `MAIL_FROM_NAME` | For email features | Must use a **verified** sending domain in Mailtrap (e.g. `hello@yourdomain.com`) |
 | `OPENWEATHER_KEY` | Optional | OpenWeatherMap API key |
 | `SEED_CLIENT_EMAIL` / `SEED_CLIENT_PASSWORD` | Optional | Demo client seeded on boot when password is set |
+
+**Mailtrap note:** Put `MAIL_*` on the **Railway API** service (and in `backend/.env` locally) — never in the Vite frontend `.env`. If Mailtrap returns `Sending from domain … is not allowed`, open Mailtrap → **Sending Domains**, verify that domain’s DNS, then use the same domain in `MAIL_FROM_ADDRESS`.
 
 **Uploads:** Attach a Railway **Volume** at `/app/storage/app/public` so wardrobe/selfie files survive redeploys.
 
