@@ -19,10 +19,11 @@ RUN composer dump-autoload --optimize \
     && php artisan package:discover --ansi
 
 COPY docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh \
+RUN sed -i 's/\r$//' /entrypoint.sh \
+    && chmod +x /entrypoint.sh \
     && mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8000
 
-CMD ["/entrypoint.sh"]
+CMD ["/bin/sh", "/entrypoint.sh"]
