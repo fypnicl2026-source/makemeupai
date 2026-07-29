@@ -100,31 +100,31 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" @click.self="handleClose">
-    <div class="glass-card w-full max-w-md p-6">
-      <h2 class="text-xl font-bold text-brand-plum">Book {{ beautician.name }}</h2>
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/35 p-4 backdrop-blur-[2px]"
+    @click.self="handleClose"
+  >
+    <div class="glass-card w-full max-w-md animate-fade-in p-6 shadow-elevated">
+      <h2 class="font-display text-xl font-semibold text-brand-plum">
+        Book {{ beautician.salon_name || beautician.name }}
+      </h2>
       <p class="mt-1 text-sm text-brand-muted">
-        {{ beautician.salon_name || "Salon" }}
+        {{ beautician.name }}
         <span v-if="beautician.area"> · {{ beautician.area }}, {{ beautician.city }}</span>
         <span v-else> · {{ beautician.city }}</span>
       </p>
 
       <div
         v-if="errorMessage"
-        class="mt-4 rounded-xl border border-[#f5c2d4] bg-[#fff0f5] px-4 py-3 text-sm text-brand-plum"
+        class="mt-4 rounded-xl border border-brand-rose/25 bg-brand-blush-deep px-4 py-3 text-sm text-brand-plum"
       >
         {{ errorMessage }}
       </div>
 
-      <form class="mt-4 space-y-4" @submit.prevent="handleSubmit">
+      <form class="mt-5 space-y-4" @submit.prevent="handleSubmit">
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="service-type">Service Type</label>
-          <select
-            id="service-type"
-            v-model="serviceType"
-            required
-            class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
-          >
+          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="service-type">Service</label>
+          <select id="service-type" v-model="serviceType" required class="input-field">
             <option value="" disabled>Select service</option>
             <option v-for="option in serviceOptions" :key="option" :value="option">
               {{ option }}
@@ -132,27 +132,22 @@ async function handleSubmit() {
           </select>
         </div>
 
-        <div>
-          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="booking-date">Date</label>
-          <input
-            id="booking-date"
-            v-model="bookingDate"
-            type="date"
-            required
-            :min="today"
-            class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
-          />
-        </div>
-
-        <div>
-          <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="booking-time">Time</label>
-          <input
-            id="booking-time"
-            v-model="bookingTime"
-            type="time"
-            required
-            class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
-          />
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="booking-date">Date</label>
+            <input
+              id="booking-date"
+              v-model="bookingDate"
+              type="date"
+              required
+              :min="today"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="booking-time">Time</label>
+            <input id="booking-time" v-model="bookingTime" type="time" required class="input-field" />
+          </div>
         </div>
 
         <div>
@@ -160,20 +155,21 @@ async function handleSubmit() {
           <textarea
             id="booking-notes"
             v-model="notes"
-            rows="3"
-            placeholder="Any special requests..."
-            class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
-          ></textarea>
+            rows="2"
+            placeholder="Any special requests…"
+            class="input-field resize-none"
+          />
         </div>
 
         <p class="text-sm font-medium text-brand-plum">
-          Estimated: Rs. {{ Number(beautician.hourly_rate).toLocaleString() }}
+          Estimated
+          <span class="text-brand-ink">Rs. {{ Number(beautician.hourly_rate).toLocaleString() }}</span>
         </p>
 
-        <div class="flex gap-3 pt-2">
+        <div class="flex gap-3 pt-1">
           <button type="button" class="btn-ghost flex-1" @click="handleClose">Cancel</button>
           <button type="submit" class="btn-primary flex-1" :disabled="submitting">
-            {{ submitting ? "Booking..." : "Confirm Booking" }}
+            {{ submitting ? "Booking…" : "Confirm" }}
           </button>
         </div>
       </form>

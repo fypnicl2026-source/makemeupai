@@ -26,23 +26,23 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
     :class="[
       'sticky top-0 z-50 border-b transition-all duration-300',
       isScrolled
-        ? 'border-brand-line/80 bg-white/95 shadow-soft backdrop-blur-lg'
-        : 'border-transparent bg-brand-blush/80 backdrop-blur-md',
+        ? 'border-brand-line/70 bg-white/90 shadow-soft backdrop-blur-md'
+        : 'border-transparent bg-transparent backdrop-blur-sm',
     ]"
   >
-    <nav class="container-shell flex min-h-[76px] items-center justify-between gap-4">
+    <nav class="container-shell flex min-h-[72px] items-center justify-between gap-4">
       <BrandLogo size="md" />
 
       <button
         type="button"
-        class="rounded-xl border border-brand-line bg-white px-3 py-2 text-sm font-semibold text-brand-plum shadow-sm md:hidden"
+        class="rounded-xl border border-brand-line/80 bg-white/80 px-3 py-2 text-sm font-semibold text-brand-plum md:hidden"
         aria-label="Toggle menu"
         @click="isMobileMenuOpen = !isMobileMenuOpen"
       >
         {{ isMobileMenuOpen ? "Close" : "Menu" }}
       </button>
 
-      <ul class="hidden items-center gap-1 md:flex">
+      <ul class="hidden items-center gap-0.5 md:flex">
         <li v-for="link in links" :key="link.to">
           <RouterLink
             :to="link.to"
@@ -59,8 +59,8 @@ onUnmounted(() => window.removeEventListener("scroll", onScroll));
           Dashboard
         </RouterLink>
         <template v-else>
-          <RouterLink class="btn-ghost" to="/signin">Sign In</RouterLink>
-          <RouterLink class="btn-primary" to="/signup">Get Started</RouterLink>
+          <RouterLink class="nav-link px-3" to="/signin">Sign in</RouterLink>
+          <RouterLink class="btn-primary" to="/signup">Get started</RouterLink>
         </template>
       </div>
     </nav>

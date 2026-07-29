@@ -45,9 +45,9 @@ const showModal = ref(false);
 
 function badgeClass(badge) {
   const classes = {
-    beginner: "bg-gray-100 text-gray-600",
-    intermediate: "bg-blue-100 text-blue-700",
-    expert: "bg-amber-100 text-amber-800",
+    beginner: "bg-stone-100 text-stone-600",
+    intermediate: "bg-brand-blush-deep text-brand-plum",
+    expert: "bg-amber-50 text-amber-800",
   };
   return classes[badge] || classes.beginner;
 }
@@ -129,27 +129,23 @@ onMounted(() => {
 
 <template>
   <LandingLayout>
-    <section class="container-shell py-10">
+    <section class="container-shell page-enter py-10 md:py-12">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-brand-plum">Book a Lahore salon</h1>
-        <p class="mt-1 text-sm text-brand-muted">
-          Preset men’s grooming and women’s beauty salons across Lahore — filter by gender, then book.
+        <h1 class="font-display text-3xl font-semibold text-brand-plum">Book a Lahore salon</h1>
+        <p class="mt-2 max-w-xl text-sm leading-relaxed text-brand-muted">
+          Men’s grooming and women’s beauty salons across Lahore — filter by type, then book.
         </p>
       </div>
 
       <div class="mb-6">
         <p class="mb-2 text-sm font-medium text-brand-muted">Salon type</p>
-        <div class="flex flex-wrap gap-2">
+        <div class="segment-group">
           <button
             v-for="g in GENDER_FILTERS"
             :key="g.label"
             type="button"
-            class="rounded-full px-4 py-2 text-sm transition-colors"
-            :class="
-              selectedGenderFocus === g.value
-                ? 'bg-[#fff0f5] font-semibold text-brand-plum ring-1 ring-brand-rose'
-                : 'bg-white text-brand-muted hover:text-brand-plum'
-            "
+            class="segment-btn"
+            :class="selectedGenderFocus === g.value ? 'segment-btn-active' : ''"
             @click="selectedGenderFocus = g.value"
           >
             {{ g.label }}
@@ -160,100 +156,93 @@ onMounted(() => {
       <div class="mb-8 flex flex-wrap gap-4">
         <div>
           <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="city-filter">City</label>
-          <select
-            id="city-filter"
-            v-model="selectedCity"
-            class="rounded-xl border border-brand-line bg-white px-4 py-2.5 text-sm text-brand-ink outline-none focus:border-brand-rose"
-          >
+          <select id="city-filter" v-model="selectedCity" class="input-field min-w-[10rem]">
             <option v-for="city in CITIES" :key="city" :value="city">{{ city }}</option>
           </select>
         </div>
         <div>
           <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="spec-filter">Specialization</label>
-          <select
-            id="spec-filter"
-            v-model="selectedSpecialization"
-            class="rounded-xl border border-brand-line bg-white px-4 py-2.5 text-sm text-brand-ink outline-none focus:border-brand-rose"
-          >
+          <select id="spec-filter" v-model="selectedSpecialization" class="input-field min-w-[12rem]">
             <option v-for="spec in SPECIALIZATIONS" :key="spec || 'all'" :value="spec">
-              {{ spec ? spec.charAt(0).toUpperCase() + spec.slice(1) : "All Specializations" }}
+              {{ spec ? spec.charAt(0).toUpperCase() + spec.slice(1) : "All specializations" }}
             </option>
           </select>
         </div>
       </div>
 
       <div v-if="loading" class="flex justify-center py-20">
-        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose"></div>
+        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose" />
       </div>
 
       <div v-else-if="fetchError" class="glass-card px-6 py-12 text-center">
-        <p class="font-semibold text-brand-plum">{{ fetchError }}</p>
-        <button type="button" class="btn-primary mt-6" @click="fetchBeauticians">Try Again</button>
+        <p class="font-display text-lg font-semibold text-brand-plum">{{ fetchError }}</p>
+        <button type="button" class="btn-primary mt-6" @click="fetchBeauticians">Try again</button>
       </div>
 
       <div v-else-if="beauticians.length === 0" class="glass-card px-6 py-12 text-center">
-        <p class="font-semibold text-brand-plum">No salons found</p>
+        <p class="font-display text-lg font-semibold text-brand-plum">No salons found</p>
         <p class="mt-2 text-sm text-brand-muted">{{ emptyHint }}</p>
-        <button type="button" class="btn-ghost mt-4" @click="selectedSpecialization = ''; selectedGenderFocus = ''">
+        <button
+          type="button"
+          class="btn-ghost mt-5"
+          @click="selectedSpecialization = ''; selectedGenderFocus = ''"
+        >
           Reset filters
         </button>
       </div>
 
-      <div v-else class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <article v-for="b in beauticians" :key="b.id" class="glass-card overflow-hidden">
-          <div class="flex items-center gap-4 p-4 pb-0">
+      <div v-else class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <article
+          v-for="b in beauticians"
+          :key="b.id"
+          class="glass-card card-hover overflow-hidden"
+        >
+          <div class="flex items-start gap-4 p-5 pb-0">
             <img
               v-if="b.profile_photo_url"
               :src="b.profile_photo_url"
               :alt="b.name"
-              class="h-16 w-16 rounded-full object-cover ring-2 ring-[#f0dce8]"
+              class="h-14 w-14 rounded-full object-cover ring-2 ring-brand-line"
             />
             <div
               v-else
-              class="flex h-16 w-16 items-center justify-center rounded-full bg-[#fff0f5] text-lg font-bold text-brand-plum ring-2 ring-[#f0dce8]"
+              class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-blush-deep text-sm font-semibold text-brand-plum ring-2 ring-brand-line"
             >
               {{ initials(b.name) }}
             </div>
-            <div>
-              <h3 class="font-semibold text-brand-ink">{{ b.name }}</h3>
-              <p class="text-sm font-medium text-brand-plum">{{ b.salon_name || "Salon" }}</p>
-              <p class="text-sm text-brand-muted">
+            <div class="min-w-0">
+              <h3 class="font-display text-lg font-semibold text-brand-ink">{{ b.salon_name || "Salon" }}</h3>
+              <p class="text-sm text-brand-muted">{{ b.name }}</p>
+              <p class="mt-0.5 text-xs text-brand-muted">
                 {{ b.city }}{{ b.area ? ` · ${b.area}` : "" }}
               </p>
             </div>
           </div>
 
-          <div class="p-4">
-            <div class="mb-3 flex flex-wrap gap-1.5">
-              <span
-                class="rounded-md bg-[#fff0f5] px-2 py-0.5 text-xs font-semibold text-brand-plum"
-              >
+          <div class="p-5">
+            <div class="mb-3 flex flex-wrap items-center gap-2">
+              <span class="rounded-md bg-brand-blush-deep px-2 py-0.5 text-xs font-medium text-brand-plum">
                 {{ genderLabel(b.gender_focus) }}
               </span>
               <span
-                v-for="spec in b.specializations"
-                :key="spec"
-                class="rounded-md bg-[#f0dce8]/60 px-2 py-0.5 text-xs capitalize text-brand-muted"
-              >
-                {{ spec }}
-              </span>
-            </div>
-
-            <div class="mb-3 flex items-center justify-between">
-              <span
-                class="rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize"
+                class="rounded-md px-2 py-0.5 text-xs font-medium capitalize"
                 :class="badgeClass(b.skill_badge)"
               >
                 {{ b.skill_badge }}
               </span>
-              <span class="text-sm text-amber-500">{{ renderStars(b.avg_rating) }}</span>
+              <span class="ml-auto text-xs text-amber-600/90">{{ renderStars(b.avg_rating) }}</span>
             </div>
 
-            <p class="mb-4 text-sm font-medium text-brand-plum">
-              Rs. {{ Number(b.hourly_rate).toLocaleString() }} / hr
+            <p class="mb-1 line-clamp-2 text-sm leading-relaxed text-brand-muted">{{ b.bio }}</p>
+
+            <p class="mt-4 font-medium text-brand-plum">
+              Rs. {{ Number(b.hourly_rate).toLocaleString() }}
+              <span class="text-sm font-normal text-brand-muted">/ hr</span>
             </p>
 
-            <button type="button" class="btn-primary w-full" @click="handleBookNow(b)">Book Now</button>
+            <button type="button" class="btn-primary mt-4 w-full" @click="handleBookNow(b)">
+              Book now
+            </button>
           </div>
         </article>
       </div>

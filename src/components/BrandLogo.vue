@@ -33,7 +33,7 @@ const sizeMap = {
       v-if="showText"
       :class="[
         sizeMap[size].text,
-        'bg-gradient-to-r from-brand-plum via-brand-rose to-brand-lilac bg-clip-text font-extrabold tracking-tight text-transparent',
+        'font-display font-semibold tracking-tight text-brand-plum transition-colors group-hover:text-brand-rose',
       ]"
     >
       MakemeupAI

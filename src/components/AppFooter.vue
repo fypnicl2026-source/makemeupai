@@ -8,7 +8,7 @@ const footerLinks = navLinks.filter((link) => link.to !== "/wardrobe");
 </script>
 
 <template>
-  <footer class="mt-auto border-t border-brand-line bg-white/90 py-12 backdrop-blur-sm">
+  <footer class="mt-auto border-t border-brand-line/80 bg-white/80 py-12 backdrop-blur-sm">
     <div class="container-shell grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
       <div>
         <BrandLogo size="md" />
@@ -20,7 +20,7 @@ const footerLinks = navLinks.filter((link) => link.to !== "/wardrobe");
       </div>
 
       <div>
-        <h4 class="text-sm font-bold uppercase tracking-wider text-brand-plum">Explore</h4>
+        <h4 class="font-display text-sm font-semibold tracking-wide text-brand-plum">Explore</h4>
         <nav class="mt-4 flex flex-col gap-2.5" aria-label="Footer navigation">
           <RouterLink
             v-for="link in footerLinks"
@@ -34,7 +34,7 @@ const footerLinks = navLinks.filter((link) => link.to !== "/wardrobe");
       </div>
 
       <div>
-        <h4 class="text-sm font-bold uppercase tracking-wider text-brand-plum">Contact</h4>
+        <h4 class="font-display text-sm font-semibold tracking-wide text-brand-plum">Contact</h4>
         <a
           href="mailto:hello@makemeupai.com"
           class="mt-4 inline-block text-sm text-brand-muted transition-colors hover:text-brand-rose"

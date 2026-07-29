@@ -48,6 +48,12 @@ const canGenerate = computed(
     Boolean(selectedMood.value)
 );
 
+const step = computed(() => {
+  if (lookResults.value) return 3;
+  if (faceTraits.value?.faceShape) return 2;
+  return 1;
+});
+
 const resultColumns = computed(() => {
   if (!lookResults.value) return [];
   if (lookResults.value.gender === "male" || selectedGender.value === "male") {
@@ -170,36 +176,43 @@ onMounted(() => {
 
 <template>
   <DashboardLayout>
-    <section class="container-shell max-w-4xl py-10">
+    <section class="container-shell max-w-4xl py-6 md:py-8">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-brand-plum">Face Insights</h1>
-        <p class="mt-1 text-sm text-brand-muted">
+        <h1 class="font-display text-3xl font-semibold text-brand-plum">Face Insights</h1>
+        <p class="mt-2 max-w-xl text-sm leading-relaxed text-brand-muted">
           Selfie → gender &amp; event → personalized looks. Men get styling and grooming; women get
           makeup, hair, and mehndi.
         </p>
-        <ol class="mt-4 flex flex-wrap gap-2 text-xs font-medium text-brand-muted">
-          <li class="rounded-full bg-[#fff0f5] px-3 py-1 text-brand-plum ring-1 ring-brand-rose/40">1. Selfie</li>
-          <li class="rounded-full bg-white px-3 py-1 ring-1 ring-brand-line">2. Gender &amp; event</li>
-          <li class="rounded-full bg-white px-3 py-1 ring-1 ring-brand-line">3. Looks</li>
+        <ol class="mt-5 flex flex-wrap gap-2 text-xs font-medium">
+          <li
+            v-for="(label, i) in ['1. Selfie', '2. Gender & event', '3. Looks']"
+            :key="label"
+            class="rounded-lg px-3 py-1.5 transition-colors"
+            :class="
+              step >= i + 1
+                ? 'bg-brand-blush-deep text-brand-plum ring-1 ring-brand-rose/25'
+                : 'bg-white/70 text-brand-muted ring-1 ring-brand-line/80'
+            "
+          >
+            {{ label }}
+          </li>
         </ol>
       </div>
 
       <div v-if="loadingProfile" class="flex justify-center py-16">
-        <div
-          class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose"
-        ></div>
+        <div class="h-10 w-10 animate-spin rounded-full border-4 border-brand-line border-t-brand-rose" />
       </div>
 
       <template v-else>
-        <section class="glass-card mb-6 p-5">
-          <h2 class="text-lg font-semibold text-brand-plum">Your selfie</h2>
+        <section class="glass-card mb-5 p-5 md:p-6">
+          <h2 class="font-display text-lg font-semibold text-brand-plum">Your selfie</h2>
           <p class="mt-1 text-sm text-brand-muted">
             Clear, front-facing photos work best. Uploading again replaces your saved profile photo.
           </p>
 
-          <div class="mt-4 flex flex-wrap items-start gap-6">
+          <div class="mt-5 flex flex-wrap items-start gap-6">
             <div
-              class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border border-brand-line bg-[#fff0f5] text-sm text-brand-muted"
+              class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border border-brand-line/80 bg-brand-blush-deep/50 text-sm text-brand-muted"
             >
               <img
                 v-if="profilePhotoUrl"
@@ -229,52 +242,42 @@ onMounted(() => {
           </div>
         </section>
 
-        <section v-if="faceTraits?.faceShape" class="glass-card mb-6 p-5">
-          <h2 class="text-lg font-semibold text-brand-plum">Style traits</h2>
+        <section v-if="faceTraits?.faceShape" class="glass-card mb-5 p-5 md:p-6">
+          <h2 class="font-display text-lg font-semibold text-brand-plum">Style traits</h2>
           <p class="mt-1 text-xs text-brand-muted">
             Heuristic style analysis (MVP) — suggestions tailored to these traits.
           </p>
           <dl class="mt-4 grid gap-3 sm:grid-cols-3">
-            <div class="rounded-xl border border-brand-line bg-white/60 px-4 py-3">
-              <dt class="text-xs font-medium text-brand-muted">Face shape</dt>
-              <dd class="mt-1 font-semibold capitalize text-brand-ink">
-                {{ formatLabel(faceTraits.faceShape) }}
-              </dd>
-            </div>
-            <div class="rounded-xl border border-brand-line bg-white/60 px-4 py-3">
-              <dt class="text-xs font-medium text-brand-muted">Skin tone</dt>
-              <dd class="mt-1 font-semibold capitalize text-brand-ink">
-                {{ formatLabel(faceTraits.skinTone) }}
-              </dd>
-            </div>
-            <div class="rounded-xl border border-brand-line bg-white/60 px-4 py-3">
-              <dt class="text-xs font-medium text-brand-muted">Hair length</dt>
-              <dd class="mt-1 font-semibold capitalize text-brand-ink">
-                {{ formatLabel(faceTraits.hairLength) }}
-              </dd>
+            <div
+              v-for="row in [
+                { label: 'Face shape', value: faceTraits.faceShape },
+                { label: 'Skin tone', value: faceTraits.skinTone },
+                { label: 'Hair length', value: faceTraits.hairLength },
+              ]"
+              :key="row.label"
+              class="rounded-xl border border-brand-line/70 bg-white/50 px-4 py-3"
+            >
+              <dt class="text-xs font-medium text-brand-muted">{{ row.label }}</dt>
+              <dd class="mt-1 font-semibold capitalize text-brand-ink">{{ formatLabel(row.value) }}</dd>
             </div>
           </dl>
         </section>
 
-        <section class="glass-card mb-6 p-5">
-          <h2 class="text-lg font-semibold text-brand-plum">Generate your complete look</h2>
+        <section class="glass-card mb-5 p-5 md:p-6">
+          <h2 class="font-display text-lg font-semibold text-brand-plum">Generate your complete look</h2>
           <p class="mt-1 text-sm text-brand-muted">
             Choose gender, event, and mood. Male looks focus on hair, beard, and styling only.
           </p>
 
-          <div class="mt-4">
+          <div class="mt-5">
             <p class="mb-2 text-sm font-medium text-brand-muted">Gender</p>
-            <div class="flex flex-wrap gap-2">
+            <div class="segment-group">
               <button
                 v-for="g in GENDERS"
                 :key="g.value"
                 type="button"
-                class="rounded-full px-4 py-2 text-sm transition-colors"
-                :class="
-                  selectedGender === g.value
-                    ? 'bg-[#fff0f5] font-semibold text-brand-plum ring-1 ring-brand-rose'
-                    : 'bg-white text-brand-muted hover:text-brand-plum'
-                "
+                class="segment-btn"
+                :class="selectedGender === g.value ? 'segment-btn-active' : ''"
                 @click="selectedGender = g.value; lookResults = null"
               >
                 {{ g.label }}
@@ -282,19 +285,15 @@ onMounted(() => {
             </div>
           </div>
 
-          <div class="mt-4">
+          <div class="mt-5">
             <p class="mb-2 text-sm font-medium text-brand-muted">Event</p>
-            <div class="flex flex-wrap gap-2">
+            <div class="segment-group">
               <button
                 v-for="event in EVENT_TYPES"
                 :key="event.value"
                 type="button"
-                class="rounded-full px-4 py-2 text-sm transition-colors"
-                :class="
-                  selectedEvent === event.value
-                    ? 'bg-[#fff0f5] font-semibold text-brand-plum ring-1 ring-brand-rose'
-                    : 'bg-white text-brand-muted hover:text-brand-plum'
-                "
+                class="segment-btn"
+                :class="selectedEvent === event.value ? 'segment-btn-active' : ''"
                 @click="selectedEvent = event.value"
               >
                 {{ event.label }}
@@ -302,19 +301,15 @@ onMounted(() => {
             </div>
           </div>
 
-          <div class="mt-4">
+          <div class="mt-5">
             <p class="mb-2 text-sm font-medium text-brand-muted">Style mood</p>
-            <div class="flex flex-wrap gap-2">
+            <div class="segment-group">
               <button
                 v-for="mood in STYLE_MOODS"
                 :key="mood.value"
                 type="button"
-                class="rounded-full px-4 py-2 text-sm transition-colors"
-                :class="
-                  selectedMood === mood.value
-                    ? 'bg-[#fff0f5] font-semibold text-brand-plum ring-1 ring-brand-rose'
-                    : 'bg-white text-brand-muted hover:text-brand-plum'
-                "
+                class="segment-btn"
+                :class="selectedMood === mood.value ? 'segment-btn-active' : ''"
                 @click="selectedMood = mood.value"
               >
                 {{ mood.label }}
@@ -336,20 +331,20 @@ onMounted(() => {
           <p v-if="generateError" class="mt-2 text-sm text-brand-plum">{{ generateError }}</p>
         </section>
 
-        <section v-if="lookResults" class="glass-card mb-6 p-5">
-          <h2 class="text-lg font-semibold text-brand-plum">Your look suggestions</h2>
+        <section v-if="lookResults" class="glass-card mb-5 animate-fade-in p-5 md:p-6">
+          <h2 class="font-display text-lg font-semibold text-brand-plum">Your look suggestions</h2>
           <p class="mt-1 text-sm text-brand-muted">
             Tailored for
             {{ lookResults.gender === "male" ? "men’s styling & grooming" : "makeup, hair & mehndi" }}.
           </p>
-          <div class="mt-4 grid gap-4 md:grid-cols-3">
+          <div class="mt-5 grid gap-4 md:grid-cols-3">
             <div
               v-for="col in resultColumns"
               :key="col.key"
-              class="rounded-xl border border-brand-line bg-white/60 p-4"
+              class="rounded-xl border border-brand-line/70 bg-white/50 p-4"
             >
-              <h3 class="font-semibold text-brand-plum">{{ col.title }}</h3>
-              <ul class="mt-2 space-y-1 text-sm text-brand-muted">
+              <h3 class="font-display text-base font-semibold text-brand-plum">{{ col.title }}</h3>
+              <ul class="mt-3 space-y-1.5 text-sm leading-relaxed text-brand-muted">
                 <li v-for="item in lookResults[col.key] || []" :key="item">{{ item }}</li>
               </ul>
             </div>

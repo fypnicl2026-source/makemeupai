@@ -45,30 +45,34 @@ async function handleSubmit() {
 
 <template>
   <LandingLayout>
-    <section class="container-shell flex min-h-[calc(100vh-200px)] items-center py-16">
+    <section class="container-shell flex min-h-[calc(100vh-200px)] items-center py-14 md:py-20">
       <div class="auth-card">
-        <div class="mb-8 flex justify-center">
+        <div class="mb-6 flex justify-center">
           <BrandLogo size="lg" :show-text="false" to="/" />
         </div>
-        <h1 class="text-center text-2xl font-bold text-brand-ink">Welcome back</h1>
-        <p class="mt-2 text-center text-sm text-brand-muted">Sign in to your MakemeupAI account</p>
+        <h1 class="text-center font-display text-2xl font-semibold text-brand-ink md:text-[1.75rem]">
+          Welcome back
+        </h1>
+        <p class="mt-2 text-center text-sm leading-relaxed text-brand-muted">
+          Sign in to continue styling with MakemeupAI
+        </p>
 
         <div
           v-if="errorMessage"
-          class="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+          class="mt-6 rounded-xl border border-red-200/80 bg-red-50/90 px-4 py-3 text-sm text-red-800"
         >
           {{ errorMessage }}
         </div>
 
         <form class="mt-8 space-y-5" @submit.prevent="handleSubmit">
           <div>
-            <label class="mb-1.5 block text-sm font-semibold text-brand-muted" for="email">Email</label>
+            <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="email">Email</label>
             <input id="email" v-model="email" type="email" required autocomplete="email" class="input-field" />
             <p v-if="fieldErrors.email" class="mt-1 text-xs text-brand-rose">{{ fieldErrors.email[0] }}</p>
           </div>
 
           <div>
-            <label class="mb-1.5 block text-sm font-semibold text-brand-muted" for="password">Password</label>
+            <label class="mb-1.5 block text-sm font-medium text-brand-muted" for="password">Password</label>
             <input id="password" v-model="password" type="password" required autocomplete="current-password" class="input-field" />
             <p v-if="fieldErrors.password" class="mt-1 text-xs text-brand-rose">{{ fieldErrors.password[0] }}</p>
           </div>
@@ -78,19 +82,21 @@ async function handleSubmit() {
               <input v-model="remember" type="checkbox" class="rounded border-brand-line text-brand-rose focus:ring-brand-rose/30" />
               Remember me
             </label>
-            <RouterLink class="font-semibold text-brand-plum hover:text-brand-rose" to="/forgot-password">
+            <RouterLink class="font-medium text-brand-plum transition-colors hover:text-brand-rose" to="/forgot-password">
               Forgot password?
             </RouterLink>
           </div>
 
           <button type="submit" class="btn-primary w-full py-3" :disabled="authStore.loading">
-            {{ authStore.loading ? "Signing in..." : "Sign In" }}
+            {{ authStore.loading ? "Signing in…" : "Sign in" }}
           </button>
         </form>
 
         <p class="mt-8 text-center text-sm text-brand-muted">
-          Don't have an account?
-          <RouterLink class="font-bold text-brand-plum hover:text-brand-rose" to="/signup">Sign up</RouterLink>
+          Don’t have an account?
+          <RouterLink class="font-semibold text-brand-plum transition-colors hover:text-brand-rose" to="/signup">
+            Sign up
+          </RouterLink>
         </p>
       </div>
     </section>
