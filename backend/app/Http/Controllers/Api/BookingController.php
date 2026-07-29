@@ -29,6 +29,15 @@ class BookingController extends Controller
             return $this->error('This beautician is not available for bookings.', null, 422);
         }
 
+        $allowed = $beautician->allowedServiceTypes();
+        if (! in_array($validated['service_type'], $allowed, true)) {
+            return $this->error(
+                'That service is not offered by this salon. Choose one of: '.implode(', ', $allowed),
+                null,
+                422
+            );
+        }
+
         $booking = Booking::create([
             'user_id' => $request->user()->id,
             'beautician_id' => $beautician->id,

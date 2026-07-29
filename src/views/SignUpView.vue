@@ -11,7 +11,8 @@ const name = ref("");
 const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
-const city = ref("");
+const city = ref("Lahore");
+const gender = ref("");
 const errorMessage = ref("");
 const fieldErrors = ref({});
 
@@ -44,7 +45,14 @@ async function handleSubmit() {
   }
 
   try {
-    await authStore.register(name.value, email.value, password.value, confirmPassword.value, city.value);
+    await authStore.register(
+      name.value,
+      email.value,
+      password.value,
+      confirmPassword.value,
+      city.value,
+      gender.value || undefined
+    );
     if (authStore.isLoggedIn) {
       router.push("/check-email");
     }
@@ -101,6 +109,38 @@ async function handleSubmit() {
             <label class="mb-1.5 block text-sm font-semibold text-brand-muted" for="city">City</label>
             <input id="city" v-model="city" type="text" required autocomplete="address-level2" class="input-field" />
             <p v-if="fieldErrors.city" class="mt-1 text-xs text-brand-rose">{{ fieldErrors.city[0] }}</p>
+          </div>
+
+          <div>
+            <label class="mb-1.5 block text-sm font-semibold text-brand-muted">Gender (optional)</label>
+            <div class="flex gap-2">
+              <button
+                type="button"
+                class="flex-1 rounded-xl border px-3 py-2.5 text-sm transition-colors"
+                :class="
+                  gender === 'female'
+                    ? 'border-brand-rose bg-[#fff0f5] font-semibold text-brand-plum'
+                    : 'border-brand-line bg-white text-brand-muted'
+                "
+                @click="gender = gender === 'female' ? '' : 'female'"
+              >
+                Female
+              </button>
+              <button
+                type="button"
+                class="flex-1 rounded-xl border px-3 py-2.5 text-sm transition-colors"
+                :class="
+                  gender === 'male'
+                    ? 'border-brand-rose bg-[#fff0f5] font-semibold text-brand-plum'
+                    : 'border-brand-line bg-white text-brand-muted'
+                "
+                @click="gender = gender === 'male' ? '' : 'male'"
+              >
+                Male
+              </button>
+            </div>
+            <p class="mt-1 text-xs text-brand-muted">Helps personalize looks and salon suggestions. You can also set this in Face Insights.</p>
+            <p v-if="fieldErrors.gender" class="mt-1 text-xs text-brand-rose">{{ fieldErrors.gender[0] }}</p>
           </div>
 
           <button type="submit" class="btn-primary w-full py-3" :disabled="authStore.loading">

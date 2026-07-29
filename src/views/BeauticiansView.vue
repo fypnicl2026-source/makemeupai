@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { showToast } from "../composables/useToast";
 import BookingModal from "../components/BookingModal.vue";
@@ -9,13 +9,36 @@ import { authStore } from "../stores/auth";
 
 const router = useRouter();
 
-const CITIES = ["", "Lahore", "Karachi", "Islamabad"];
-const SPECIALIZATIONS = ["", "makeup", "bridal", "hairstyle", "skincare", "mehndi"];
+const CITIES = ["Lahore"];
+const GENDER_FILTERS = [
+  { label: "All", value: "" },
+  { label: "Women", value: "female" },
+  { label: "Men", value: "male" },
+];
+const SPECIALIZATIONS = [
+  "",
+  "makeup",
+  "bridal",
+  "hairstyle",
+  "skincare",
+  "mehndi",
+  "haircut",
+  "beard",
+  "grooming",
+  "groom",
+  "styling",
+  "party",
+];
 
 const beauticians = ref([]);
 const loading = ref(false);
 const fetchError = ref("");
-const selectedCity = ref("");
+const selectedCity = ref("Lahore");
+const selectedGenderFocus = ref(
+  authStore.user?.gender === "male" || authStore.user?.gender === "female"
+    ? authStore.user.gender
+    : ""
+);
 const selectedSpecialization = ref("");
 const selectedBeautician = ref(null);
 const showModal = ref(false);
@@ -27,6 +50,12 @@ function badgeClass(badge) {
     expert: "bg-amber-100 text-amber-800",
   };
   return classes[badge] || classes.beginner;
+}
+
+function genderLabel(focus) {
+  if (focus === "male") return "Men’s salon";
+  if (focus === "female") return "Women’s salon";
+  return "Unisex";
 }
 
 function initials(name) {
@@ -47,13 +76,13 @@ async function fetchBeauticians() {
   loading.value = true;
   fetchError.value = "";
   try {
-    const filters = {};
-    if (selectedCity.value) filters.city = selectedCity.value;
+    const filters = { city: selectedCity.value || "Lahore" };
     if (selectedSpecialization.value) filters.specialization = selectedSpecialization.value;
+    if (selectedGenderFocus.value) filters.gender_focus = selectedGenderFocus.value;
     beauticians.value = await getBeauticians(filters);
   } catch {
     beauticians.value = [];
-    fetchError.value = "Could not load beauticians. Please try again.";
+    fetchError.value = "Could not load salons. Please try again.";
   } finally {
     loading.value = false;
   }
@@ -79,7 +108,17 @@ function onBookingSuccess() {
   showToast("Booking confirmed!", "success");
 }
 
-watch([selectedCity, selectedSpecialization], () => {
+const emptyHint = computed(() => {
+  if (selectedGenderFocus.value === "male") {
+    return "No men’s salons match these filters in Lahore. Clear specialization or show All.";
+  }
+  if (selectedGenderFocus.value === "female") {
+    return "No women’s salons match these filters in Lahore. Clear specialization or show All.";
+  }
+  return "Try adjusting your filters — Lahore has preset men’s and women’s salons.";
+});
+
+watch([selectedCity, selectedSpecialization, selectedGenderFocus], () => {
   fetchBeauticians();
 });
 
@@ -92,8 +131,30 @@ onMounted(() => {
   <LandingLayout>
     <section class="container-shell py-10">
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-brand-plum">Find the Right Beautician</h1>
-        <p class="mt-1 text-sm text-brand-muted">Browse professionals and book your next beauty session.</p>
+        <h1 class="text-3xl font-bold text-brand-plum">Book a Lahore salon</h1>
+        <p class="mt-1 text-sm text-brand-muted">
+          Preset men’s grooming and women’s beauty salons across Lahore — filter by gender, then book.
+        </p>
+      </div>
+
+      <div class="mb-6">
+        <p class="mb-2 text-sm font-medium text-brand-muted">Salon type</p>
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="g in GENDER_FILTERS"
+            :key="g.label"
+            type="button"
+            class="rounded-full px-4 py-2 text-sm transition-colors"
+            :class="
+              selectedGenderFocus === g.value
+                ? 'bg-[#fff0f5] font-semibold text-brand-plum ring-1 ring-brand-rose'
+                : 'bg-white text-brand-muted hover:text-brand-plum'
+            "
+            @click="selectedGenderFocus = g.value"
+          >
+            {{ g.label }}
+          </button>
+        </div>
       </div>
 
       <div class="mb-8 flex flex-wrap gap-4">
@@ -104,9 +165,7 @@ onMounted(() => {
             v-model="selectedCity"
             class="rounded-xl border border-brand-line bg-white px-4 py-2.5 text-sm text-brand-ink outline-none focus:border-brand-rose"
           >
-            <option v-for="city in CITIES" :key="city || 'all'" :value="city">
-              {{ city || "All Cities" }}
-            </option>
+            <option v-for="city in CITIES" :key="city" :value="city">{{ city }}</option>
           </select>
         </div>
         <div>
@@ -133,8 +192,11 @@ onMounted(() => {
       </div>
 
       <div v-else-if="beauticians.length === 0" class="glass-card px-6 py-12 text-center">
-        <p class="font-semibold text-brand-plum">No beauticians found</p>
-        <p class="mt-2 text-sm text-brand-muted">Try adjusting your filters.</p>
+        <p class="font-semibold text-brand-plum">No salons found</p>
+        <p class="mt-2 text-sm text-brand-muted">{{ emptyHint }}</p>
+        <button type="button" class="btn-ghost mt-4" @click="selectedSpecialization = ''; selectedGenderFocus = ''">
+          Reset filters
+        </button>
       </div>
 
       <div v-else class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -154,12 +216,20 @@ onMounted(() => {
             </div>
             <div>
               <h3 class="font-semibold text-brand-ink">{{ b.name }}</h3>
-              <p class="text-sm text-brand-muted">{{ b.city }}</p>
+              <p class="text-sm font-medium text-brand-plum">{{ b.salon_name || "Salon" }}</p>
+              <p class="text-sm text-brand-muted">
+                {{ b.city }}{{ b.area ? ` · ${b.area}` : "" }}
+              </p>
             </div>
           </div>
 
           <div class="p-4">
             <div class="mb-3 flex flex-wrap gap-1.5">
+              <span
+                class="rounded-md bg-[#fff0f5] px-2 py-0.5 text-xs font-semibold text-brand-plum"
+              >
+                {{ genderLabel(b.gender_focus) }}
+              </span>
               <span
                 v-for="spec in b.specializations"
                 :key="spec"
@@ -195,6 +265,5 @@ onMounted(() => {
       @close="closeModal"
       @success="onBookingSuccess"
     />
-
   </LandingLayout>
 </template>

@@ -54,8 +54,11 @@ class ApiSmokeTest extends TestCase
     {
         return Beautician::create(array_merge([
             'name' => 'Ayesha Noor',
+            'salon_name' => 'Noor Bridal Studio',
             'bio' => 'Makeup specialist.',
             'city' => 'Lahore',
+            'area' => 'Gulberg',
+            'gender_focus' => 'female',
             'specializations' => ['makeup', 'bridal'],
             'hourly_rate' => 3500.00,
             'skill_badge' => 'expert',
@@ -90,7 +93,7 @@ class ApiSmokeTest extends TestCase
     {
         return array_merge([
             'beautician_id' => $beauticianId,
-            'service_type' => 'Party Makeup',
+            'service_type' => 'Makeup Session',
             'booking_date' => now()->addDays(3)->format('Y-m-d'),
             'booking_time' => '14:00',
             'notes' => 'Please call on arrival.',
@@ -335,6 +338,31 @@ class ApiSmokeTest extends TestCase
         $this->assertSame(['Lahore'], $cities);
     }
 
+    public function test_get_beauticians_filtered_by_gender_focus_returns_200(): void
+    {
+        $this->seedBeautician([
+            'name' => 'Women Salon',
+            'salon_name' => 'Blush Lane',
+            'gender_focus' => 'female',
+        ]);
+        $this->seedBeautician([
+            'name' => 'Men Salon',
+            'salon_name' => 'Barber Co',
+            'gender_focus' => 'male',
+            'specializations' => ['haircut', 'beard'],
+        ]);
+
+        $response = $this->getJson('/api/beauticians?city=Lahore&gender_focus=male');
+
+        $response->assertOk()
+            ->assertJson(['success' => true]);
+
+        $focuses = collect($response->json('data.beauticians'))->pluck('gender_focus')->unique()->values()->all();
+        $this->assertSame(['male'], $focuses);
+        $this->assertArrayHasKey('allowed_services', $response->json('data.beauticians.0'));
+        $this->assertArrayHasKey('salon_name', $response->json('data.beauticians.0'));
+    }
+
     public function test_get_beautician_by_valid_id_returns_200(): void
     {
         $beautician = $this->seedBeautician();
@@ -378,6 +406,36 @@ class ApiSmokeTest extends TestCase
         $response->assertCreated()
             ->assertJson(['success' => true])
             ->assertJsonPath('data.booking.status', 'pending');
+    }
+
+    public function test_post_bookings_with_mismatched_service_returns_422(): void
+    {
+        $this->actingAsUser();
+        $beautician = $this->seedBeautician(['gender_focus' => 'male', 'specializations' => ['haircut', 'beard']]);
+
+        $response = $this->postJson('/api/bookings', $this->validBookingPayload($beautician->id, [
+            'service_type' => 'Bridal Package',
+        ]));
+
+        $response->assertStatus(422)
+            ->assertJson(['success' => false]);
+    }
+
+    public function test_post_bookings_male_salon_with_valid_service_returns_201(): void
+    {
+        $this->actingAsUser();
+        $beautician = $this->seedBeautician([
+            'name' => 'Ali Barber',
+            'gender_focus' => 'male',
+            'specializations' => ['haircut', 'beard'],
+        ]);
+
+        $response = $this->postJson('/api/bookings', $this->validBookingPayload($beautician->id, [
+            'service_type' => 'Beard Grooming',
+        ]));
+
+        $response->assertCreated()
+            ->assertJsonPath('data.booking.service_type', 'Beard Grooming');
     }
 
     public function test_post_bookings_with_past_date_returns_422(): void
@@ -537,17 +595,46 @@ class ApiSmokeTest extends TestCase
         $response = $this->postJson('/api/ai/look-recommendations', [
             'eventType' => 'wedding',
             'styleMood' => 'elegant',
+            'gender' => 'female',
         ]);
 
         $response->assertOk()
             ->assertJson(['success' => true])
+            ->assertJsonPath('data.gender', 'female')
             ->assertJsonStructure([
-                'data' => ['makeup', 'hairstyle', 'mehndi'],
+                'data' => ['makeup', 'hairstyle', 'mehndi', 'gender'],
             ]);
 
         $makeup = $response->json('data.makeup');
         $this->assertIsArray($makeup);
         $this->assertNotEmpty($makeup);
+
+        $user->refresh();
+        $this->assertSame('female', $user->gender);
+    }
+
+    public function test_post_look_recommendations_for_male_returns_styling_categories(): void
+    {
+        Storage::fake('public');
+        $this->actingAsUser();
+
+        $this->post('/api/ai/face-analysis', [
+            'image' => $this->fakeSelfieUpload(),
+        ])->assertOk();
+
+        $response = $this->postJson('/api/ai/look-recommendations', [
+            'eventType' => 'party',
+            'styleMood' => 'bold',
+            'gender' => 'male',
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('data.gender', 'male')
+            ->assertJsonStructure([
+                'data' => ['hairstyle', 'beard_grooming', 'styling', 'gender'],
+            ])
+            ->assertJsonMissingPath('data.makeup')
+            ->assertJsonMissingPath('data.mehndi');
     }
 
     public function test_get_face_profile_returns_photo_and_traits(): void

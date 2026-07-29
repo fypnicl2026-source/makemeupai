@@ -1,6 +1,20 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { createBooking } from "../services/bookings";
+
+const FEMALE_SERVICES = [
+  "Makeup Session",
+  "Hairstyling",
+  "Mehndi",
+  "Bridal Package",
+];
+
+const MALE_SERVICES = [
+  "Haircut & Styling",
+  "Beard Grooming",
+  "Groom Package",
+  "Party Styling",
+];
 
 const props = defineProps({
   beautician: {
@@ -18,14 +32,30 @@ const notes = ref("");
 const submitting = ref(false);
 const errorMessage = ref("");
 
-const SERVICE_OPTIONS = [
-  "Makeup Session",
-  "Hairstyling",
-  "Mehndi",
-  "Bridal Package",
-];
+const serviceOptions = computed(() => {
+  if (Array.isArray(props.beautician.allowed_services) && props.beautician.allowed_services.length) {
+    return props.beautician.allowed_services;
+  }
+  if (props.beautician.gender_focus === "male") return MALE_SERVICES;
+  if (props.beautician.gender_focus === "female") return FEMALE_SERVICES;
+  return [...FEMALE_SERVICES, ...MALE_SERVICES];
+});
 
-const today = computed(() => new Date().toISOString().split("T")[0]);
+const today = computed(() => {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().split("T")[0];
+});
+
+watch(
+  serviceOptions,
+  (opts) => {
+    if (serviceType.value && !opts.includes(serviceType.value)) {
+      serviceType.value = "";
+    }
+  },
+  { immediate: true }
+);
 
 function resetForm() {
   serviceType.value = "";
@@ -73,6 +103,11 @@ async function handleSubmit() {
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" @click.self="handleClose">
     <div class="glass-card w-full max-w-md p-6">
       <h2 class="text-xl font-bold text-brand-plum">Book {{ beautician.name }}</h2>
+      <p class="mt-1 text-sm text-brand-muted">
+        {{ beautician.salon_name || "Salon" }}
+        <span v-if="beautician.area"> · {{ beautician.area }}, {{ beautician.city }}</span>
+        <span v-else> · {{ beautician.city }}</span>
+      </p>
 
       <div
         v-if="errorMessage"
@@ -91,7 +126,7 @@ async function handleSubmit() {
             class="w-full rounded-xl border border-brand-line bg-white px-4 py-2.5 text-[#1f1124] outline-none focus:border-brand-rose"
           >
             <option value="" disabled>Select service</option>
-            <option v-for="option in SERVICE_OPTIONS" :key="option" :value="option">
+            <option v-for="option in serviceOptions" :key="option" :value="option">
               {{ option }}
             </option>
           </select>

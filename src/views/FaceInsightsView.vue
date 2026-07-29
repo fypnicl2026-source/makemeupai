@@ -1,11 +1,16 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import DashboardLayout from "../layouts/DashboardLayout.vue";
 import { getFaceProfile, getLookRecommendations, uploadFaceAnalysis } from "../services/ai";
 import { authStore } from "../stores/auth";
 
 const router = useRouter();
+
+const GENDERS = [
+  { label: "Female", value: "female" },
+  { label: "Male", value: "male" },
+];
 
 const EVENT_TYPES = [
   { label: "Wedding", value: "wedding" },
@@ -24,6 +29,7 @@ const STYLE_MOODS = [
 
 const profilePhotoUrl = ref(null);
 const faceTraits = ref(null);
+const selectedGender = ref(authStore.user?.gender === "male" || authStore.user?.gender === "female" ? authStore.user.gender : "");
 const selectedEvent = ref("party");
 const selectedMood = ref("elegant");
 const lookResults = ref(null);
@@ -33,6 +39,30 @@ const uploading = ref(false);
 const generating = ref(false);
 const uploadError = ref("");
 const generateError = ref("");
+
+const canGenerate = computed(
+  () =>
+    Boolean(faceTraits.value?.faceShape) &&
+    Boolean(selectedGender.value) &&
+    Boolean(selectedEvent.value) &&
+    Boolean(selectedMood.value)
+);
+
+const resultColumns = computed(() => {
+  if (!lookResults.value) return [];
+  if (lookResults.value.gender === "male" || selectedGender.value === "male") {
+    return [
+      { key: "hairstyle", title: "Hairstyle" },
+      { key: "beard_grooming", title: "Beard & grooming" },
+      { key: "styling", title: "Styling" },
+    ];
+  }
+  return [
+    { key: "makeup", title: "Makeup" },
+    { key: "hairstyle", title: "Hairstyle" },
+    { key: "mehndi", title: "Mehndi" },
+  ];
+});
 
 function formatLabel(value) {
   if (!value) return "";
@@ -52,6 +82,9 @@ async function loadProfile() {
     profilePhotoUrl.value = authStore.user?.profile_photo_url ?? null;
     faceTraits.value = authStore.user?.face_traits ?? null;
   } finally {
+    if (!selectedGender.value && (authStore.user?.gender === "male" || authStore.user?.gender === "female")) {
+      selectedGender.value = authStore.user.gender;
+    }
     loadingProfile.value = false;
   }
 }
@@ -91,6 +124,10 @@ async function generateLook() {
     generateError.value = "Upload a selfie first to unlock look recommendations.";
     return;
   }
+  if (!selectedGender.value) {
+    generateError.value = "Select your gender so we can tailor styling options.";
+    return;
+  }
 
   generateError.value = "";
   generating.value = true;
@@ -100,7 +137,9 @@ async function generateLook() {
     lookResults.value = await getLookRecommendations({
       eventType: selectedEvent.value,
       styleMood: selectedMood.value,
+      gender: selectedGender.value,
     });
+    await authStore.fetchUser();
   } catch (err) {
     generateError.value =
       err.response?.data?.message || "Could not generate recommendations. Please try again.";
@@ -135,9 +174,14 @@ onMounted(() => {
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-brand-plum">Face Insights</h1>
         <p class="mt-1 text-sm text-brand-muted">
-          Upload a selfie for personalized style analysis. We store your photo on your profile so
-          you can refresh recommendations anytime.
+          Selfie → gender &amp; event → personalized looks. Men get styling and grooming; women get
+          makeup, hair, and mehndi.
         </p>
+        <ol class="mt-4 flex flex-wrap gap-2 text-xs font-medium text-brand-muted">
+          <li class="rounded-full bg-[#fff0f5] px-3 py-1 text-brand-plum ring-1 ring-brand-rose/40">1. Selfie</li>
+          <li class="rounded-full bg-white px-3 py-1 ring-1 ring-brand-line">2. Gender &amp; event</li>
+          <li class="rounded-full bg-white px-3 py-1 ring-1 ring-brand-line">3. Looks</li>
+        </ol>
       </div>
 
       <div v-if="loadingProfile" class="flex justify-center py-16">
@@ -214,7 +258,29 @@ onMounted(() => {
 
         <section class="glass-card mb-6 p-5">
           <h2 class="text-lg font-semibold text-brand-plum">Generate your complete look</h2>
-          <p class="mt-1 text-sm text-brand-muted">Pick an event and mood for makeup, hair, and mehndi ideas.</p>
+          <p class="mt-1 text-sm text-brand-muted">
+            Choose gender, event, and mood. Male looks focus on hair, beard, and styling only.
+          </p>
+
+          <div class="mt-4">
+            <p class="mb-2 text-sm font-medium text-brand-muted">Gender</p>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="g in GENDERS"
+                :key="g.value"
+                type="button"
+                class="rounded-full px-4 py-2 text-sm transition-colors"
+                :class="
+                  selectedGender === g.value
+                    ? 'bg-[#fff0f5] font-semibold text-brand-plum ring-1 ring-brand-rose'
+                    : 'bg-white text-brand-muted hover:text-brand-plum'
+                "
+                @click="selectedGender = g.value; lookResults = null"
+              >
+                {{ g.label }}
+              </button>
+            </div>
+          </div>
 
           <div class="mt-4">
             <p class="mb-2 text-sm font-medium text-brand-muted">Event</p>
@@ -259,33 +325,32 @@ onMounted(() => {
           <button
             type="button"
             class="btn-primary mt-6"
-            :disabled="generating || !faceTraits?.faceShape"
+            :disabled="generating || !canGenerate"
             @click="generateLook"
           >
             {{ generating ? "Generating…" : "Generate look recommendations" }}
           </button>
+          <p v-if="!canGenerate && faceTraits?.faceShape" class="mt-2 text-xs text-brand-muted">
+            Select gender, event, and mood to continue.
+          </p>
           <p v-if="generateError" class="mt-2 text-sm text-brand-plum">{{ generateError }}</p>
         </section>
 
         <section v-if="lookResults" class="glass-card mb-6 p-5">
           <h2 class="text-lg font-semibold text-brand-plum">Your look suggestions</h2>
+          <p class="mt-1 text-sm text-brand-muted">
+            Tailored for
+            {{ lookResults.gender === "male" ? "men’s styling & grooming" : "makeup, hair & mehndi" }}.
+          </p>
           <div class="mt-4 grid gap-4 md:grid-cols-3">
-            <div class="rounded-xl border border-brand-line bg-white/60 p-4">
-              <h3 class="font-semibold text-brand-plum">Makeup</h3>
+            <div
+              v-for="col in resultColumns"
+              :key="col.key"
+              class="rounded-xl border border-brand-line bg-white/60 p-4"
+            >
+              <h3 class="font-semibold text-brand-plum">{{ col.title }}</h3>
               <ul class="mt-2 space-y-1 text-sm text-brand-muted">
-                <li v-for="item in lookResults.makeup" :key="item">{{ item }}</li>
-              </ul>
-            </div>
-            <div class="rounded-xl border border-brand-line bg-white/60 p-4">
-              <h3 class="font-semibold text-brand-plum">Hairstyle</h3>
-              <ul class="mt-2 space-y-1 text-sm text-brand-muted">
-                <li v-for="item in lookResults.hairstyle" :key="item">{{ item }}</li>
-              </ul>
-            </div>
-            <div class="rounded-xl border border-brand-line bg-white/60 p-4">
-              <h3 class="font-semibold text-brand-plum">Mehndi</h3>
-              <ul class="mt-2 space-y-1 text-sm text-brand-muted">
-                <li v-for="item in lookResults.mehndi" :key="item">{{ item }}</li>
+                <li v-for="item in lookResults[col.key] || []" :key="item">{{ item }}</li>
               </ul>
             </div>
           </div>

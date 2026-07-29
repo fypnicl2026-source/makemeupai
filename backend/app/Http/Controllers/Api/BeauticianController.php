@@ -32,7 +32,18 @@ class BeauticianController extends Controller
             $query->whereJsonContains('specializations', $request->specialization);
         }
 
-        $beauticians = $query->get();
+        if ($request->filled('gender_focus')) {
+            $request->validate([
+                'gender_focus' => ['required', 'in:male,female,unisex'],
+            ]);
+
+            $focus = $request->gender_focus;
+            $query->where(function ($q) use ($focus) {
+                $q->where('gender_focus', $focus)->orWhere('gender_focus', 'unisex');
+            });
+        }
+
+        $beauticians = $query->orderByDesc('avg_rating')->get();
 
         return $this->success([
             'beauticians' => BeauticianResource::collection($beauticians),

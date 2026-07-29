@@ -34,17 +34,19 @@ export const authStore = reactive({
     }
   },
 
-  async register(name, email, password, passwordConfirmation, city) {
+  async register(name, email, password, passwordConfirmation, city, gender) {
     this.loading = true;
     try {
       await getCsrf();
-      const { data } = await api.post("/api/auth/register", {
+      const payload = {
         name,
         email,
         password,
         password_confirmation: passwordConfirmation,
         city,
-      });
+      };
+      if (gender) payload.gender = gender;
+      const { data } = await api.post("/api/auth/register", payload);
       setAuthToken(data.data.token);
       await this.fetchUser();
       return data;

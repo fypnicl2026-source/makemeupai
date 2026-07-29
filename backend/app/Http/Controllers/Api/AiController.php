@@ -71,6 +71,7 @@ class AiController extends Controller
         $validated = $request->validate([
             'eventType' => ['required', Rule::in(['wedding', 'party', 'casual', 'work', 'formal'])],
             'styleMood' => ['required', Rule::in(['elegant', 'natural', 'bold', 'soft'])],
+            'gender' => ['nullable', Rule::in(['male', 'female'])],
         ]);
 
         $user = $request->user();
@@ -84,10 +85,24 @@ class AiController extends Controller
             );
         }
 
+        $gender = $validated['gender'] ?? $user->gender;
+        if (! in_array($gender, ['male', 'female'], true)) {
+            return $this->error(
+                'Select your gender to get personalized look recommendations.',
+                null,
+                422
+            );
+        }
+
+        if ($user->gender !== $gender) {
+            $user->update(['gender' => $gender]);
+        }
+
         $recommendations = $this->lookRecommendationService->recommend(
             $traits,
             $validated['eventType'],
-            $validated['styleMood']
+            $validated['styleMood'],
+            $gender
         );
 
         return $this->success($recommendations);

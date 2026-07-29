@@ -14,11 +14,12 @@ export async function uploadFaceAnalysis(formData) {
   return data.data;
 }
 
-export async function getLookRecommendations({ eventType, styleMood }) {
+export async function getLookRecommendations({ eventType, styleMood, gender }) {
   await getCsrf();
   const { data } = await api.post("/api/ai/look-recommendations", {
     eventType,
     styleMood,
+    gender,
   });
   return data.data;
 }
